@@ -5,7 +5,8 @@
 - gzip 后约 8KB，TypeScript 编写，自带类型
 - 动画是时间的纯函数：任意一帧都能精确复现
 - 默认照顾系统的“减少动态效果”设置
-- 用于 [noahvisuals.vercel.app](https://noahvisuals.vercel.app) 的全部动效
+- 在线演示：**[noah-motion.vercel.app](https://noah-motion.vercel.app)**（[片头动画](https://noah-motion.vercel.app/hero)）
+- 用于 [noahvisuals.vercel.app](https://noahvisuals.vercel.app) 的全部动效，见 [动效页](https://noahvisuals.vercel.app/motion/)
 
 > A tiny, dependency-free animation library: closed-form springs, scrubbable timelines, a few web motion helpers, and a CLI that renders the same timeline to MP4 frame by frame.
 
@@ -16,6 +17,8 @@ npm i github:noahvisualsx/noah-motion
 ```
 
 本地看演示：`npm run demo`，然后打开 http://127.0.0.1:5174/demo/
+
+部署演示页：`npm run build:site` 会把演示页打包到 `site/`，Vercel 按 `vercel.json` 自动构建。
 
 ## 弹簧 `spring`
 
