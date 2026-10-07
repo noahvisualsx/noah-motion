@@ -41,7 +41,8 @@
     "build": "tsc -p tsconfig.json",
     "test": "node --test test/",
     "demo": "npm run build && node bin/serve-demo.mjs",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "build:site": "npm run build && node bin/build-site.mjs"
   },
   "engines": {
     "node": ">=22.18"
@@ -49,5 +50,6 @@
   "devDependencies": {
     "playwright-core": "^1.63.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "homepage": "https://noah-motion.vercel.app"
 }

@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>noah-motion 演示</title>
     <meta name="description" content="noah-motion：零依赖的小型动画库，闭式弹簧、可拖动时间轴、网页动效小工具，还能把动画导出成视频。" />
+    <meta property="og:title" content="noah-motion" />
+    <meta property="og:description" content="零依赖的小型动画库：闭式弹簧、可拖动的时间轴、网页动效，还能把动画逐帧导出成视频。" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@noahvisualsx" />
+    <meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231d1d1f'/%3E%3Ccircle cx='20' cy='34' r='6' fill='%23fff'/%3E%3Ccircle cx='32' cy='28' r='6' fill='%230071e3'/%3E%3Ccircle cx='44' cy='34' r='6' fill='%23fff'/%3E%3C/svg%3E" />
     <style>
       :root {
         --bg: #fbfbf9;
@@ -258,6 +265,21 @@
         background: var(--elev);
         box-shadow: var(--shadow);
       }
+      .pill-link {
+        display: inline-flex;
+        align-items: center;
+        height: 40px;
+        padding: 0 18px;
+        border-radius: 999px;
+        font-size: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        color: var(--accent);
+      }
+      .pill-link.primary {
+        background: var(--ink);
+        color: var(--bg);
+      }
       footer {
         margin-top: 96px;
         color: var(--ink-2);
@@ -281,6 +303,10 @@
       <h1>noah-motion</h1>
       <p class="lede">零依赖的小型动画库。闭式弹簧、可以随意拖动的时间轴、几个常用的网页动效，同一份动画既能在网页上播放，也能逐帧导出成视频。</p>
       <p class="meta">gzip 后约 8KB · TypeScript · 默认照顾“减少动态效果”设置</p>
+      <div class="row" style="margin-top: 20px">
+        <a class="pill-link primary" href="https://github.com/noahvisualsx/noah-motion">在 GitHub 上查看</a>
+        <a class="pill-link" href="./hero.html">看片头动画 →</a>
+      </div>
 
       <section>
         <h2>弹簧</h2>
@@ -384,6 +410,7 @@ exposeForRender(tl);
 
 # 终端里
 npx noah-motion render demo/hero.html --out hero.mp4 --size 1080x1080 --motion-blur 4</code></pre>
+        <p class="meta">导出的就是这段 <a href="./hero.html">片头动画</a>：1080×1080、60 帧、6 秒，只有 233KB。</p>
       </section>
 
       <footer>

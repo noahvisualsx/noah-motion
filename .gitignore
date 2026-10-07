@@ -3,3 +3,6 @@ dist/
 .DS_Store
 *.mp4
 .frames/
+site/
+.vercel
+.env*
