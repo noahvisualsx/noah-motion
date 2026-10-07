@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>noah-motion · 片头</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #f4f4f1;
+        overflow: hidden;
+      }
+      #stage {
+        position: relative;
+        width: 100vmin;
+        height: 100vmin;
+        margin: 0 auto;
+        background:
+          radial-gradient(55% 60% at 28% 30%, rgba(185, 212, 240, 0.55), transparent 70%),
+          radial-gradient(50% 55% at 76% 74%, rgba(232, 163, 181, 0.35), transparent 70%),
+          #f4f4f1;
+        font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      }
+      .pill,
+      .dot {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        background: #1d1d1f;
+      }
+      .pill {
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        white-space: nowrap;
+      }
+      .word {
+        display: inline-block;
+      }
+      .caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 9vmin;
+        text-align: center;
+        font-size: 3.2vmin;
+        color: #6e6e73;
+        letter-spacing: 0.02em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div class="dot" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="pill" id="pill"><span class="word" id="word">noah-motion</span></div>
+      <div class="caption" id="caption">springs · timelines · rendered frame by frame</div>
+    </div>
+    <script type="module">
+      import { spring, track, timeline, clamp, mixColor, exposeForRender } from '../dist/index.js';
+
+      // 全部用 vmin 的百分比写，方便导出成任意尺寸的正方形
+      const $ = (id) => document.getElementById(id);
+      const vmin = () => Math.min(innerWidth, innerHeight) / 100;
+      const snappy = spring({ duration: 0.45, bounce: 0.18 });
+      const jelly = spring({ duration: 0.6, bounce: 0.42 });
+      const D = 6;
+
+      // 圆点 → 胶囊（显示名字）→ 分成三颗点依次弹跳 → 合回圆点 → 消失，首尾相同可以无缝循环
+      const scale = track(0, [[0.15, 1], [5.55, 0]], snappy);
+      const pillW = track(4, [[0.6, 62], [2.5, 4]], snappy);
+      const pillH = track(4, [[0.6, 15], [2.5, 4]], snappy);
+      const blue = track(0, [[1.0, 1], [2.3, 0]]);
+      const wordIn = track(0, [[0.85, 1], [2.25, 0]], snappy);
+      const split = track(0, [[2.6, 1], [4.9, 0]], jelly);
+      const hop = [0, 1, 2].map((i) =>
+        track(0, [
+          [3.1 + i * 0.14, -9, jelly],
+          [3.45 + i * 0.14, 0, jelly],
+          [3.9 + i * 0.14, -6, jelly],
+          [4.25 + i * 0.14, 0, jelly],
+        ]),
+      );
+      const caption = track(0, [[1.2, 1], [4.6, 0]]);
+
+      const tl = timeline({
+        duration: D,
+        loop: true,
+        render(t) {
+          const u = vmin();
+          const s = Math.max(0, scale(t));
+          const pill = $('pill');
+          pill.style.width = pillW(t) * u + 'px';
+          pill.style.height = pillH(t) * u + 'px';
+          pill.style.borderRadius = (pillH(t) * u) / 2 + 'px';
+          pill.style.background = mixColor('#1d1d1f', '#0071e3', clamp(blue(t)));
+          pill.style.transform = `translate(-50%, -50%) scale(${s})`;
+          pill.style.opacity = split(t) > 0.02 ? 0 : 1;
+          const w = $('word');
+          w.style.fontSize = 6.2 * u + 'px';
+          w.style.opacity = clamp(wordIn(t));
+          w.style.transform = `translateY(${(1 - clamp(wordIn(t))) * 4 * u}px)`;
+          w.style.filter = `blur(${(1 - clamp(wordIn(t))) * 0.8 * u}px)`;
+          [0, 1, 2].forEach((i) => {
+            const d = $('d' + i);
+            const k = split(t);
+            d.style.width = d.style.height = 4 * u + 'px';
+            d.style.borderRadius = '50%';
+            d.style.opacity = k > 0.02 ? 1 : 0;
+            d.style.transform = `translate(calc(-50% + ${(i - 1) * 8 * k * u}px), calc(-50% + ${hop[i](t) * u}px)) scale(${s})`;
+          });
+          const c = clamp(caption(t));
+          $('caption').style.opacity = c;
+          $('caption').style.transform = `translateY(${(1 - c) * 2 * u}px)`;
+        },
+      });
+      exposeForRender(tl);
+      addEventListener('resize', () => tl.seek(tl.time));
+    </script>
+  </body>
+</html>

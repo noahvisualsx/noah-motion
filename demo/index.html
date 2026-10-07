@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>noah-motion 演示</title>
+    <meta name="description" content="noah-motion：零依赖的小型动画库，闭式弹簧、可拖动时间轴、网页动效小工具，还能把动画导出成视频。" />
+    <style>
+      :root {
+        --bg: #fbfbf9;
+        --elev: #fff;
+        --sunk: #f2f2ef;
+        --ink: #1d1d1f;
+        --ink-2: #6e6e73;
+        --line: rgba(0, 0, 0, 0.08);
+        --accent: #0071e3;
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #000;
+          --elev: #1c1c1e;
+          --sunk: #2c2c2e;
+          --ink: #f5f5f7;
+          --ink-2: #a1a1a6;
+          --line: rgba(255, 255, 255, 0.12);
+          --accent: #2997ff;
+          --shadow: 0 0 0 1px rgba(255, 255, 255, 0.07);
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font: 17px/1.6 -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 72px 24px 120px;
+      }
+      h1 {
+        font-size: clamp(40px, 7vw, 64px);
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+        margin: 0 0 12px;
+      }
+      h2 {
+        font-size: 28px;
+        letter-spacing: -0.02em;
+        margin: 0 0 6px;
+      }
+      p.lede {
+        color: var(--ink-2);
+        font-size: 20px;
+        margin: 0 0 8px;
+        max-width: 640px;
+      }
+      section {
+        margin-top: 72px;
+      }
+      section > p {
+        color: var(--ink-2);
+        margin: 0 0 20px;
+      }
+      code,
+      pre {
+        font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 13.5px;
+      }
+      pre {
+        background: var(--sunk);
+        border-radius: 14px;
+        padding: 14px 16px;
+        overflow-x: auto;
+        margin: 12px 0 0;
+      }
+      .panel {
+        background: var(--elev);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        padding: 24px;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      label {
+        font-size: 14px;
+        color: var(--ink-2);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      input[type='range'] {
+        width: 160px;
+        accent-color: var(--accent);
+      }
+      button {
+        font: inherit;
+        font-size: 15px;
+        font-weight: 600;
+        border: 0;
+        border-radius: 999px;
+        height: 40px;
+        padding: 0 18px;
+        cursor: pointer;
+        background: var(--ink);
+        color: var(--bg);
+      }
+      button.secondary {
+        background: var(--sunk);
+        color: var(--ink);
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      /* 弹簧实验室 */
+      .lab {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        align-items: center;
+      }
+      .rail {
+        position: relative;
+        height: 56px;
+        background: var(--sunk);
+        border-radius: 999px;
+        margin-top: 18px;
+      }
+      .ball {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      svg.curve {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .curve path {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 2.5;
+      }
+      .curve line {
+        stroke: var(--line);
+      }
+      .curve text {
+        fill: var(--ink-2);
+        font-size: 11px;
+      }
+      .meta {
+        font-size: 13px;
+        color: var(--ink-2);
+        margin-top: 10px;
+      }
+      /* 时间轴 */
+      .stage {
+        position: relative;
+        height: 260px;
+        border-radius: 18px;
+        background: var(--sunk);
+        overflow: hidden;
+      }
+      .shape {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      input.scrub {
+        width: 100%;
+        margin-top: 14px;
+      }
+      /* 小工具 */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+      .tile {
+        aspect-ratio: 1;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+      }
+      .tile.wide {
+        grid-column: span 2;
+        aspect-ratio: auto;
+      }
+      .numbers {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+      .numbers strong {
+        display: block;
+        font-size: 44px;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+      }
+      .numbers span {
+        color: var(--ink-2);
+        font-size: 14px;
+      }
+      .morph-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        overflow: hidden;
+      }
+      .morph-btn.done {
+        background: #1f9d55;
+        color: #fff;
+      }
+      .art {
+        width: 100%;
+        max-width: 420px;
+        aspect-ratio: 4 / 3;
+        border-radius: 18px;
+      }
+      .art canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .cards div {
+        height: 90px;
+        border-radius: 16px;
+        background: var(--elev);
+        box-shadow: var(--shadow);
+      }
+      footer {
+        margin-top: 96px;
+        color: var(--ink-2);
+        font-size: 14px;
+      }
+      a {
+        color: var(--accent);
+      }
+      @media (max-width: 720px) {
+        .lab {
+          grid-template-columns: 1fr;
+        }
+        .grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>noah-motion</h1>
+      <p class="lede">零依赖的小型动画库。闭式弹簧、可以随意拖动的时间轴、几个常用的网页动效，同一份动画既能在网页上播放，也能逐帧导出成视频。</p>
+      <p class="meta">gzip 后约 8KB · TypeScript · 默认照顾“减少动态效果”设置</p>
+
+      <section>
+        <h2>弹簧</h2>
+        <p>不逐帧模拟，直接解方程：给一个时间，立刻得到位置和速度。拖动下面两个滑块，看曲线怎么变。</p>
+        <div class="panel lab">
+          <div>
+            <div class="row">
+              <label>时长 <input id="dur" type="range" min="0.15" max="1.5" step="0.05" value="0.5" /> <output id="durOut">0.5s</output></label>
+              <label>回弹 <input id="bounce" type="range" min="-0.8" max="0.8" step="0.05" value="0.25" /> <output id="bounceOut">0.25</output></label>
+            </div>
+            <div class="rail"><div class="ball" id="ball"></div></div>
+            <div class="row" style="margin-top: 16px">
+              <button id="kick">弹一下</button>
+              <span class="meta" id="springMeta"></span>
+            </div>
+          </div>
+          <svg class="curve" id="curve" viewBox="0 0 320 200" role="img" aria-label="弹簧曲线"></svg>
+        </div>
+        <pre><code>import { spring } from 'noah-motion';
+const s = spring({ duration: 0.5, bounce: 0.25 });
+s(0.2);          // 第 0.2 秒的进度
+s.velocity(0.2); // 第 0.2 秒的速度
+s.toCSS();       // { easing: 'linear(0, …, 1)', duration: 812 }</code></pre>
+      </section>
+
+      <section>
+        <h2>时间轴</h2>
+        <p>每个属性写成关键帧轨道，前一段没停稳就换目标也会自然衔接。整个画面是时间的纯函数，拖动进度条可以停在任意一帧。</p>
+        <div class="panel">
+          <div class="stage" id="stage"><div class="shape" id="shape"><span id="word">noah-motion</span></div></div>
+          <input class="scrub" id="scrub" type="range" min="0" max="1" step="0.001" value="0" aria-label="时间轴进度" />
+          <div class="row">
+            <button id="toggle">暂停</button>
+            <span class="meta" id="clock">0.00s</span>
+          </div>
+        </div>
+        <pre><code>import { track, timeline, spring } from 'noah-motion';
+const w = track(16, [[0.4, 220], [2.2, 120], [3.4, 16]]);
+const tl = timeline({ duration: 4, loop: true, target: stage, render(t) {
+  shape.style.width = w(t) + 'px';
+}});
+tl.seek(1.5);</code></pre>
+      </section>
+
+      <section>
+        <h2>网页小工具</h2>
+        <p>从 <code>noah-motion/dom</code> 引入，都用弹簧驱动。</p>
+
+        <div class="panel">
+          <div class="row" style="justify-content: space-between">
+            <strong>flip · 布局变化动画</strong>
+            <button class="secondary" id="shuffle">打乱顺序</button>
+          </div>
+          <div class="grid" id="grid" style="margin-top: 16px"></div>
+          <pre><code>await flip('.tile', () => grid.append(...shuffled));</code></pre>
+        </div>
+
+        <div class="panel" style="margin-top: 16px">
+          <div class="row" style="justify-content: space-between">
+            <strong>countUp · 数字滚动</strong>
+            <button class="secondary" id="recount">再滚一次</button>
+          </div>
+          <div class="numbers" style="margin-top: 12px">
+            <div><strong data-count="211726" id="n1">21.2万</strong><span>浏览</span></div>
+            <div><strong data-count="1033" id="n2">1033</strong><span>点赞</span></div>
+            <div><strong data-count="536" id="n3">536</strong><span>收藏</span></div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top: 16px">
+          <strong>morph · 尺寸变形</strong>
+          <div class="row" style="margin-top: 14px">
+            <button class="morph-btn" id="copy"><span>复制提示词</span></button>
+          </div>
+          <pre><code>morph(button, () => { label.textContent = '已复制'; button.classList.add('done'); });</code></pre>
+        </div>
+
+        <div class="panel" style="margin-top: 16px">
+          <div class="row" style="justify-content: space-between">
+            <strong>denoise · 生成式出现</strong>
+            <button class="secondary" id="regen">再生成一次</button>
+          </div>
+          <p class="meta">像扩散模型一轮轮去噪：模糊和噪点分几步减弱。</p>
+          <div class="art" id="art"><canvas id="artCanvas" width="840" height="630"></canvas></div>
+        </div>
+
+        <div class="panel" style="margin-top: 16px">
+          <div class="row" style="justify-content: space-between">
+            <strong>reveal · 滚动进场</strong>
+            <button class="secondary" id="rereveal">重新进场</button>
+          </div>
+          <div class="cards" id="cards" style="margin-top: 16px"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>导出视频</h2>
+        <p>同一份时间轴，用命令行逐帧截图，再用 ffmpeg 合成 MP4。每一帧都是算出来的，不会掉帧。</p>
+        <pre><code>import { exposeForRender } from 'noah-motion';
+exposeForRender(tl);
+
+# 终端里
+npx noah-motion render demo/hero.html --out hero.mp4 --size 1080x1080 --motion-blur 4</code></pre>
+      </section>
+
+      <footer>
+        noah-motion · MIT · 作者 <a href="https://x.com/noahvisualsx">@noahvisualsx</a>
+      </footer>
+    </main>
+
+    <script type="module">
+      import { spring, track, timeline, mixColor, clamp } from '../dist/index.js';
+      import { flip, countUp, morph, denoise, reveal } from '../dist/dom/index.js';
+
+      const $ = (id) => document.getElementById(id);
+
+      // ---------- 弹簧实验室 ----------
+      let current = spring({ duration: 0.5, bounce: 0.25 });
+      const drawCurve = () => {
+        const s = current;
+        const span = Math.max(s.settle, 0.4) * 1.1;
+        const W = 320, H = 200, top = 30, base = 170;
+        const pts = Array.from({ length: 121 }, (_, i) => {
+          const t = (span * i) / 120;
+          return `${(i / 120) * W},${base - s(t) * (base - top)}`;
+        });
+        $('curve').innerHTML = `
+          <line x1="0" x2="${W}" y1="${top}" y2="${top}" stroke-dasharray="4 4" />
+          <line x1="0" x2="${W}" y1="${base}" y2="${base}" />
+          <text x="4" y="${top - 6}">1</text><text x="4" y="${base + 14}">0</text>
+          <text x="${W - 4}" y="${base + 14}" text-anchor="end">${span.toFixed(2)}s</text>
+          <path d="M${pts.join(' L')}" />`;
+        $('springMeta').textContent = `阻尼比 ${s.dampingRatio.toFixed(2)} · ${s.settle.toFixed(2)} 秒停稳`;
+      };
+      const updateSpring = () => {
+        const duration = Number($('dur').value);
+        const bounce = Number($('bounce').value);
+        $('durOut').textContent = duration + 's';
+        $('bounceOut').textContent = bounce;
+        current = spring({ duration, bounce });
+        drawCurve();
+      };
+      $('dur').oninput = $('bounce').oninput = updateSpring;
+      let ballAt = 0;
+      $('kick').onclick = () => {
+        const rail = $('ball').parentElement.clientWidth - 56;
+        const from = ballAt, to = ballAt === 0 ? rail : 0;
+        ballAt = to;
+        const s = current, t0 = performance.now();
+        const step = (now) => {
+          const t = (now - t0) / 1000;
+          $('ball').style.transform = `translateX(${from + (to - from) * s(t)}px)`;
+          if (t < s.settle) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      updateSpring();
+
+      // ---------- 时间轴 ----------
+      const stage = $('stage'), shape = $('shape'), word = $('word');
+      const D = 4.2;
+      const W = track(16, [[0.35, 230], [2.1, 260], [2.9, 120], [3.6, 16]]);
+      const H = track(16, [[0.35, 64], [2.1, 160], [2.9, 120], [3.6, 16]]);
+      const R = track(8, [[0.35, 32], [2.1, 28], [2.9, 60], [3.6, 8]]);
+      const S = track(0, [[0.05, 1], [3.75, 0]]);
+      const tint = track(0, [[1.2, 1], [2.9, 0]]);
+      const textIn = track(0, [[0.55, 1], [1.95, 0]]);
+      const spin = track(0, [[2.9, 180], [3.6, 360]]);
+      const tl = timeline({
+        duration: D,
+        loop: true,
+        target: stage,
+        render(t) {
+          shape.style.width = W(t) + 'px';
+          shape.style.height = H(t) + 'px';
+          shape.style.borderRadius = R(t) + 'px';
+          shape.style.transform = `translate(-50%, -50%) scale(${S(t)}) rotate(${spin(t) % 360}deg)`;
+          shape.style.background = mixColor('#1d1d1f', '#0071e3', clamp(tint(t)));
+          word.style.opacity = clamp(textIn(t));
+          word.style.transform = `translateY(${(1 - clamp(textIn(t))) * 14}px)`;
+          word.style.fontSize = 18 + clamp(tint(t)) * 10 + 'px';
+          $('scrub').value = t / D;
+          $('clock').textContent = t.toFixed(2) + 's';
+        },
+      });
+      $('scrub').oninput = (e) => {
+        tl.pause();
+        $('toggle').textContent = '播放';
+        tl.seek(Number(e.target.value) * D);
+      };
+      $('toggle').onclick = () => {
+        if (tl.playing) { tl.pause(); $('toggle').textContent = '播放'; }
+        else { tl.play(); $('toggle').textContent = '暂停'; }
+      };
+
+      // ---------- flip ----------
+      const colors = ['#0071e3', '#1d1d1f', '#e8a3b5', '#5ac8fa', '#34c759', '#ff9f0a', '#af52de', '#ff375f'];
+      colors.forEach((c, i) => {
+        const d = document.createElement('div');
+        d.className = 'tile' + (i === 2 ? ' wide' : '');
+        d.style.background = c;
+        d.textContent = i + 1;
+        $('grid').append(d);
+      });
+      $('shuffle').onclick = () => {
+        const tiles = [...$('grid').children];
+        const shuffled = tiles.map((t) => [Math.random(), t]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+        flip(tiles, () => $('grid').append(...shuffled));
+      };
+
+      // ---------- countUp ----------
+      const fmt = (n) => (n >= 10000 ? (n / 10000).toFixed(1) + '万' : String(Math.round(n)));
+      const recount = () => ['n1', 'n2', 'n3'].forEach((id) => countUp($(id), Number($(id).dataset.count), { format: fmt }));
+      $('recount').onclick = recount;
+      recount();
+
+      // ---------- morph ----------
+      let timer = 0;
+      $('copy').onclick = () => {
+        const btn = $('copy');
+        if (btn.classList.contains('done')) return;
+        morph(btn, () => { btn.firstElementChild.textContent = '已复制 ✓'; btn.classList.add('done'); });
+        clearTimeout(timer);
+        timer = setTimeout(() => morph(btn, () => { btn.firstElementChild.textContent = '复制提示词'; btn.classList.remove('done'); }), 1600);
+      };
+
+      // ---------- denoise（画一幅随机的抽象图再“生成”出来）----------
+      const paint = () => {
+        const c = $('artCanvas'), g = c.getContext('2d');
+        const hue = Math.random() * 360;
+        const bg = g.createLinearGradient(0, 0, c.width, c.height);
+        bg.addColorStop(0, `hsl(${hue} 70% 82%)`);
+        bg.addColorStop(1, `hsl(${(hue + 60) % 360} 65% 70%)`);
+        g.fillStyle = bg;
+        g.fillRect(0, 0, c.width, c.height);
+        for (let i = 0; i < 7; i++) {
+          const x = Math.random() * c.width, y = Math.random() * c.height, r = 60 + Math.random() * 180;
+          const rg = g.createRadialGradient(x, y, 0, x, y, r);
+          rg.addColorStop(0, `hsl(${(hue + i * 40) % 360} 80% 60% / 0.85)`);
+          rg.addColorStop(1, `hsl(${(hue + i * 40) % 360} 80% 60% / 0)`);
+          g.fillStyle = rg;
+          g.fillRect(0, 0, c.width, c.height);
+        }
+      };
+      const regen = () => { paint(); denoise($('art')); };
+      $('regen').onclick = regen;
+      regen();
+
+      // ---------- reveal ----------
+      let stop = reveal('#cards > div', { y: 30, blur: 6 });
+      $('rereveal').onclick = () => {
+        stop();
+        stop = reveal('#cards > div', { y: 30, blur: 6 });
+      };
+    </script>
+  </body>
+</html>

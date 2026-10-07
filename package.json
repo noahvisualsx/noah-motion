@@ -1,0 +1,53 @@
+{
+  "name": "noah-motion",
+  "version": "0.1.0",
+  "description": "一个零依赖的小型动画库：闭式弹簧、可拖动的时间轴、网页动效小工具，同一份动画既能实时播放也能导出成视频。",
+  "type": "module",
+  "license": "MIT",
+  "author": "noahvisualsx",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noahvisualsx/noah-motion.git"
+  },
+  "keywords": [
+    "animation",
+    "spring",
+    "timeline",
+    "motion",
+    "flip",
+    "web-animations"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./dom": {
+      "types": "./dist/dom/index.d.ts",
+      "default": "./dist/dom/index.js"
+    }
+  },
+  "bin": {
+    "noah-motion": "./bin/noah-motion.mjs"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/",
+    "demo": "npm run build && node bin/serve-demo.mjs",
+    "prepare": "npm run build"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.63.0",
+    "typescript": "^7.0.2"
+  }
+}
