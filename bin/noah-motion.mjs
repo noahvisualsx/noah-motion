@@ -23,6 +23,7 @@ const HELP = `用法：noah-motion render <页面.html> [选项]
   --motion-blur <数字>  每帧采样几次做运动模糊，默认 1（关闭）；4 比较自然，导出会慢 4 倍
   --selector <CSS>      只截这个元素，默认截整个画面
   --audio <文件>        给视频配上音频（按视频时长截断）
+  --query <参数>        附加到页面地址的参数，比如 name=orbits&text=你好
   --root <目录>         静态服务器的根目录，默认当前目录
   --chrome <路径>       Chrome 可执行文件，默认用系统安装的 Chrome
 `;
@@ -65,7 +66,7 @@ async function render(input, opts) {
   await fs.mkdir(path.dirname(out), { recursive: true });
 
   const server = await serve(root);
-  const url = `http://127.0.0.1:${server.address().port}/${path.relative(root, page).split(path.sep).join('/')}?render`;
+  const url = `http://127.0.0.1:${server.address().port}/${path.relative(root, page).split(path.sep).join('/')}?render${opts.query ? '&' + opts.query : ''}`;
   const browser = await chromium.launch(opts.chrome ? { executablePath: opts.chrome } : { channel: 'chrome' });
   try {
     const tab = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });

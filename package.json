@@ -26,6 +26,10 @@
     "./dom": {
       "types": "./dist/dom/index.d.ts",
       "default": "./dist/dom/index.js"
+    },
+    "./gallery": {
+      "types": "./dist/gallery/index.d.ts",
+      "default": "./dist/gallery/index.js"
     }
   },
   "bin": {

@@ -95,6 +95,34 @@ denoise('.cover');
 reveal('.card', { y: 24, blur: 6, stagger: 0.06 });
 ```
 
+## 作品廊 `noah-motion/gallery`
+
+11 个用 noah-motion 做的原创动画场景，一行代码挂到页面上（容器需要有宽高，推荐 `aspect-ratio: 16 / 10`）：
+
+```js
+import { scenes } from 'noah-motion/gallery';
+
+const tl = scenes.particles.mount(box, { text: '你好' });
+tl.pause();
+tl.seek(3.2);
+```
+
+| 场景 | 名字 | 用到 |
+|---|---|---|
+| 极光标题 | `aurora` | 周期轨迹、逐字进场 |
+| 粒子成字 | `particles` | 上千条轨道、黄金角螺旋盘 |
+| 布局变换 | `layouts` | 48 条轨道、错开出发 |
+| 滚轮数字 | `odometer` | 弹簧速度驱动模糊 |
+| 三折页 | `fold` | 3D 透视铰链 |
+| 涟漪点阵 | `ripple` | 弹簧脉冲按距离延迟 |
+| 几何构成 | `bauhaus` | 进场 / 退场共用一条轨道 |
+| 水滴合体 | `metaballs` | 场 + 阈值 |
+| 波浪字 | `wave` | 叠加冲击 |
+| 星轨 | `orbits` | 无缝循环 |
+| 呼吸 | `breathe` | 不过冲的慢弹簧 |
+
+在线看全部：[noah-motion.vercel.app/#gallery](https://noah-motion.vercel.app/#gallery)。单独打开某个场景：`scene.html?name=orbits`。
+
 ## 导出视频
 
 同一条时间轴，用命令行逐帧截图再合成 MP4。每一帧都是算出来的，不会掉帧，还可以做运动模糊。
@@ -109,7 +137,13 @@ npm i -D playwright-core   # 第一次用时安装；需要本机有 Chrome 和 
 npx noah-motion render demo/hero.html --out hero.mp4 --size 1080x1080 --fps 60 --motion-blur 4
 ```
 
-选项：`--out` 输出路径，`--size` 尺寸，`--fps` 帧率，`--motion-blur` 每帧采样次数（4 比较自然），`--selector` 只截某个元素，`--audio` 配音频，`--chrome` 指定 Chrome 路径。
+作品廊里的场景也能导出（16:10）：
+
+```bash
+npx noah-motion render demo/scene.html --query name=orbits --out orbits.mp4 --size 1280x800
+```
+
+选项：`--out` 输出路径，`--size` 尺寸，`--fps` 帧率，`--motion-blur` 每帧采样次数（4 比较自然），`--selector` 只截某个元素，`--query` 给页面加参数，`--audio` 配音频，`--chrome` 指定 Chrome 路径。
 
 ## 设计原则
 

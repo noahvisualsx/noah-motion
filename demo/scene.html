@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>noah-motion · 场景</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #000;
+        overflow: hidden;
+      }
+      /* 场景按 16:10 铺满窗口；导出视频时用 --size 1280x800 之类的 16:10 尺寸 */
+      #box {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: min(100vw, 160vh);
+        aspect-ratio: 16 / 10;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="box"></div>
+    <script type="module">
+      // 单独展示一个作品廊场景：scene.html?name=aurora&text=你好
+      // 导出视频：npx noah-motion render demo/scene.html --query "name=aurora" --size 1280x800
+      import { exposeForRender } from '../dist/index.js';
+      import { scenes } from '../dist/gallery/index.js';
+
+      const params = new URLSearchParams(location.search);
+      const name = params.get('name') ?? 'aurora';
+      const scene = scenes[name] ?? scenes.aurora;
+      document.title = `noah-motion · ${scene.title}`;
+      const tl = scene.mount(document.getElementById('box'), { text: params.get('text') ?? undefined });
+      exposeForRender(tl);
+      if (params.has('t')) {
+        tl.pause();
+        tl.seek(Number(params.get('t')));
+      }
+    </script>
+  </body>
+</html>
