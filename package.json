@@ -30,6 +30,10 @@
     "./gallery": {
       "types": "./dist/gallery/index.d.ts",
       "default": "./dist/gallery/index.js"
+    },
+    "./gallery/*": {
+      "types": "./dist/gallery/*.d.ts",
+      "default": "./dist/gallery/*.js"
     }
   },
   "bin": {

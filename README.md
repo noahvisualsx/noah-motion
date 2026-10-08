@@ -115,6 +115,8 @@ tl.seek(3.2);
 | 图形 | 翻牌拼图 `tiles`、万花筒 `kaleido`、涟漪点阵 `ripple`、几何构成 `bauhaus`、节拍 `equalizer`、水滴合体 `metaballs`、星轨 `orbits`、呼吸 `breathe`、乘法弦图 `modular`、形状变形 `morph` |
 | 插画 | 樱花雨 `petals`、纸飞机 `plane`、吊牌 `hangers`、窗外一天 `daylight`、烟花 `fireworks` |
 
+只用一两个场景时可以单独引入，打包时不会带上其他场景：`import { splitflap } from 'noah-motion/gallery/splitflap';`
+
 选项：`text` 换掉场景里的文字（翻页站牌、解码文字用 `/` 分行、用 `|` 分组，比如 `'第一句/第二行|下一句/第二行'`），`image` 给翻牌拼图换图片，`autoplay: false` 先不播放，`lang: 'en'` 让场景里的默认文字换成英文。每个场景都首尾相接、可以无缝循环。
 
 每个场景除了中文的 `title`、`description`，还有英文版 `scene.en.title`、`scene.en.description`；分类的英文名在 `CATEGORY_EN` 里。
