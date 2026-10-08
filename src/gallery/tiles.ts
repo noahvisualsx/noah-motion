@@ -58,7 +58,7 @@ export const tiles: SceneDef = {
 .nm-tiles .back{transform:rotateY(180deg);background-size:640px 400px;background-repeat:no-repeat}`,
     );
     // 传入的图片先按 16:10 居中裁成 cover，再切到每块砖背面（直接拉伸会变形）
-    let image = generatedArt();
+    let image = options.image ? '' : generatedArt(); // 传了图片就不用生成默认图，背面在图片加载后再填
     const rnd = seeded(4);
     const palette = ['#1c1c1e', '#2c2c2e', '#0a84ff', '#5e5ce6', '#bf5af2', '#30d158', '#ff9f0a', '#ff375f'];
     const flip = spring({ duration: 0.8, bounce: 0.22 });
@@ -73,7 +73,7 @@ export const tiles: SceneDef = {
         const pick = rnd();
         front.style.background = pick > 0.78 ? palette[2 + Math.floor(rnd() * 6)]! : palette[Math.floor(rnd() * 2)]!;
         const back = el('div', 'face back', node);
-        back.style.backgroundImage = `url("${image}")`;
+        if (image) back.style.backgroundImage = `url("${image}")`;
         back.style.backgroundPosition = `${-c * SIZE - 1.5}px ${-r * SIZE - 1.5}px`;
         // 对角线波：先翻左上角，最后翻右下角；翻回时反过来
         const diag = (c + r) / (COLS + ROWS - 2);
