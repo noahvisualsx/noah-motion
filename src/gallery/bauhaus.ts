@@ -33,6 +33,11 @@ export const bauhaus: SceneDef = {
   description: '包豪斯风格：圆、半圆、三角、色条从画面外带着旋转飞进来拼成一幅构图，停留时轻轻呼吸，再各自退场。',
   tags: ['track', 'spring', '构图'],
   tone: 'light',
+  en: {
+    title: 'Bauhaus',
+    description: 'Circles, half circles, triangles and bars spin in from off-canvas to form a Bauhaus composition, breathe gently for a moment, then leave one by one.',
+    tags: ['track', 'spring', 'composition'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-bauhaus');
     injectCSS(
@@ -60,7 +65,7 @@ export const bauhaus: SceneDef = {
         o: track(0, [[sh.at, 1, spring({ duration: 0.3 })], [out + 0.25, 0, leave]]),
       };
     });
-    const cap = el('div', 'cap', stage, options.text ?? 'FORM · 构成');
+    const cap = el('div', 'cap', stage, options.text ?? (options.lang === 'en' ? 'FORM · COMPOSITION' : 'FORM · 构成'));
     const capO = track(0, [[1.9, 1, fly], [5.8, 0, leave]]);
 
     const render = (t: number) => {

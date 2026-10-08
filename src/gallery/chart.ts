@@ -6,7 +6,8 @@ import { timeline } from '../timeline.ts';
 import { createStage, el, svg, injectCSS, type SceneDef } from './util.ts';
 
 const D = 8;
-const DAYS = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+const DAYS_ZH = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+const DAYS_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const VALUES = [3200, 5400, 4100, 8800, 7600, 12400, 9800];
 const X0 = 70;
 const X1 = 590;
@@ -26,7 +27,12 @@ export const chart: SceneDef = {
   description: '一周浏览量的折线图自己画出来：线头经过的点依次弹出，提示框跳到最高点，总数跟着线一起涨。',
   tags: ['spring', 'track', 'SVG'],
   tone: 'light',
+  en: {
+    title: 'Growing chart',
+    description: 'A week of views draws itself: points pop as the line passes, a tooltip jumps to the peak, and the total climbs along with the line.',
+  },
   mount(host, options = {}) {
+    const DAYS = options.lang === 'en' ? DAYS_EN : DAYS_ZH;
     const stage = createStage(host, 'light', 'nm-chart');
     injectCSS(
       'nm-chart',
@@ -60,7 +66,7 @@ export const chart: SceneDef = {
       const day = el('div', 'day', stage, d);
       day.style.left = `${pts[i]![0]}px`;
     });
-    el('div', 'k', stage, options.text ?? 'WEEKLY VIEWS · 本周浏览');
+    el('div', 'k', stage, options.text ?? (options.lang === 'en' ? 'WEEKLY VIEWS' : 'WEEKLY VIEWS · 本周浏览'));
     const big = el('div', 'big', stage);
     const delta = el('div', 'delta', stage, '↑ 38%');
     const tip = el('div', 'tip', stage);

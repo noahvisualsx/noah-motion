@@ -22,6 +22,11 @@ export const metaballs: SceneDef = {
   description: '五颗水滴绕着中心转，被弹簧收拢时融成一大滴，再带着回弹分开。',
   tags: ['spring', '场 + 阈值', 'canvas'],
   tone: 'light',
+  en: {
+    title: 'Metaballs',
+    description: 'Five drops circle the center, melt into one big drop when a spring pulls them in, then bounce apart again.',
+    tags: ['spring', 'field + threshold', 'canvas'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-meta');
     stage.style.background = 'radial-gradient(70% 80% at 50% 45%, #ffffff, #eceff5)';

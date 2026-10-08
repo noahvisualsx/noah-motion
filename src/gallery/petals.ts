@@ -13,6 +13,11 @@ export const petals: SceneDef = {
   description: '花瓣带着摆动和翻转缓缓飘落，近处大而快、远处小而慢。每片的轨迹都是周期的，永远在下，却能无缝循环。',
   tags: ['timeline', 'loop', '景深'],
   tone: 'light',
+  en: {
+    title: 'Blossom rain',
+    description: 'Petals sway and tumble as they fall, big and quick up close, small and slow far away. Every path is periodic, so they fall forever yet loop seamlessly.',
+    tags: ['timeline', 'loop', 'depth'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-petals');
     injectCSS(
@@ -22,7 +27,7 @@ export const petals: SceneDef = {
 .nm-petals .s{position:absolute;left:0;right:0;top:252px;text-align:center;font-size:12px;letter-spacing:.4em;color:#b07a8f;font-weight:600}`,
     );
     const { ctx: back } = createCanvas(stage);
-    const title = el('div', 't', stage, options.text ?? '春日');
+    const title = el('div', 't', stage, options.text ?? (options.lang === 'en' ? 'Spring' : '春日'));
     el('div', 's', stage, 'SPRING · 2026');
     const { ctx: front } = createCanvas(stage);
 

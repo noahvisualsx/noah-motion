@@ -14,6 +14,10 @@ export const odometer: SceneDef = {
   description: '每一位都是一条滚轮，数值由弹簧驱动。滚得越快越模糊，模糊程度直接来自弹簧的速度。',
   tags: ['spring', 'velocity', 'track'],
   tone: 'light',
+  en: {
+    title: 'Odometer',
+    description: 'Every digit is its own wheel, driven by one spring. The faster it spins, the blurrier it gets, and the blur comes straight from the spring’s velocity.',
+  },
   mount(host, options = {}) {
     const target = Number(options.text ?? 211726) || 211726;
     const digits = String(target).length;
@@ -30,7 +34,7 @@ export const odometer: SceneDef = {
 .nm-odo .comma{width:18px;text-align:center;font-size:56px;font-weight:700;color:#c7c7cc;line-height:${DIGIT_H}px}
 .nm-odo .u{position:absolute;left:0;right:0;top:268px;text-align:center;font-size:15px;color:#6e6e73}`,
     );
-    el('div', 'k', stage, 'VIEWS · 浏览量');
+    el('div', 'k', stage, options.lang === 'en' ? 'VIEWS' : 'VIEWS · 浏览量');
     const row = el('div', 'row', stage);
     const wheels: { strip: HTMLElement; place: number }[] = [];
     for (let i = 0; i < digits; i++) {
@@ -42,7 +46,7 @@ export const odometer: SceneDef = {
       wheels.push({ strip, place });
       if (place % 3 === 0 && place > 0) el('div', 'comma', row, ',');
     }
-    const unit = el('div', 'u', stage, '由一条弹簧驱动 · 越快越模糊');
+    const unit = el('div', 'u', stage, options.lang === 'en' ? 'Driven by one spring · faster means blurrier' : '由一条弹簧驱动 · 越快越模糊');
 
     // 计数器不能过冲（数值大时一点点回弹就会多出几十），所以用刚好不过冲的弹簧
     const roll = spring({ duration: 1.4, bounce: 0 });

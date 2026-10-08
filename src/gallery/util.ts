@@ -18,9 +18,16 @@ export interface SceneOptions {
   image?: string;
   /** 创建后是否立刻播放。默认 true；开了“减少动态效果”时总是先停在静止画面 */
   autoplay?: boolean;
+  /** 场景里默认文字的语言，默认中文。传 'en' 时用英文（印章这类中文书法场景保持中文） */
+  lang?: Lang;
 }
 
+export type Lang = 'zh' | 'en';
+
 export type Category = '文字' | '界面' | '数据' | '图形' | '插画';
+
+/** 分类的英文名 */
+export const CATEGORY_EN: Record<Category, string> = { 文字: 'Type', 界面: 'Interface', 数据: 'Data', 图形: 'Graphics', 插画: 'Illustration' };
 
 export interface SceneDef {
   /** 中文名 */
@@ -32,6 +39,8 @@ export interface SceneDef {
   /** 用到的 noah-motion 能力 */
   tags: string[];
   tone: Tone;
+  /** 英文的名字、说明和标签（标签不写就沿用中文版的） */
+  en: { title: string; description: string; tags?: string[] };
   /** 把场景挂到容器里，返回它的时间轴。容器需要有确定的宽高（比如 aspect-ratio: 16 / 10） */
   mount(host: HTMLElement, options?: SceneOptions): Timeline;
 }

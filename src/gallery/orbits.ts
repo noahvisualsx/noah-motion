@@ -18,6 +18,10 @@ export const orbits: SceneDef = {
   description: '几颗星体沿倾斜的椭圆轨道运行，拖着渐隐的尾迹。每条轨道的周期都能整除总时长，整段无缝循环。',
   tags: ['timeline', 'loop', 'canvas'],
   tone: 'dark',
+  en: {
+    title: 'Orbits',
+    description: 'Bodies travel tilted elliptical orbits with fading trails. Every period divides the total length, so the whole piece loops seamlessly.',
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-orbits');
     const { ctx } = createCanvas(stage);

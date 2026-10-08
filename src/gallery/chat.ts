@@ -6,8 +6,24 @@ import { timeline } from '../timeline.ts';
 import { createStage, el, injectCSS, type SceneDef } from './util.ts';
 
 const D = 9;
-const QUESTION = '帮我写一句春日抓拍的提示词';
-const ANSWER = '春日樱花下的抓拍，奶白针织开衫，侧逆光勾出发丝，手机随手拍质感，轻微过曝和颗粒。';
+const TEXT = {
+  zh: {
+    question: '帮我写一句春日抓拍的提示词',
+    answer: '春日樱花下的抓拍，奶白针织开衫，侧逆光勾出发丝，手机随手拍质感，轻微过曝和颗粒。',
+    name: 'noah 助手',
+    online: '在线',
+    typing: '正在输入…',
+    copy: '复制提示词',
+  },
+  en: {
+    question: 'Write me a prompt for a candid spring shot',
+    answer: 'Candid shot under spring cherry blossoms, cream knit cardigan, side backlight on loose hair, casual phone-camera look, slightly overexposed and grainy.',
+    name: 'noah assistant',
+    online: 'Online',
+    typing: 'Typing…',
+    copy: 'Copy prompt',
+  },
+};
 
 export const chat: SceneDef = {
   title: 'AI 对话',
@@ -15,7 +31,13 @@ export const chat: SceneDef = {
   description: '发一句话，对方显示“正在输入”，回答逐字出现，最后弹出“复制”按钮。气泡从发出的那一角弹出来。',
   tags: ['spring', 'track', '逐字显示'],
   tone: 'light',
+  en: {
+    title: 'AI chat',
+    description: 'Send a message, see “typing…”, watch the reply stream in letter by letter, then a Copy button pops up. Each bubble springs out of the corner it was sent from.',
+    tags: ['spring', 'track', 'streaming text'],
+  },
   mount(host, options = {}) {
+    const L = TEXT[options.lang ?? 'zh'];
     const stage = createStage(host, 'light', 'nm-chat');
     injectCSS(
       'nm-chat',
@@ -36,16 +58,16 @@ export const chat: SceneDef = {
     const win = el('div', 'win', stage);
     const bar = el('div', 'bar', win);
     el('i', 'av', bar);
-    el('span', '', bar, 'noah 助手');
-    const status = el('small', '', bar, '在线');
+    el('span', '', bar, L.name);
+    const status = el('small', '', bar, L.online);
     const list = el('div', 'list', win);
-    const me = el('div', 'b me', list, options.text ?? QUESTION);
+    const me = el('div', 'b me', list, options.text ?? L.question);
     const typing = el('div', 'b ai typing', list);
     const dots = [0, 1, 2].map(() => el('i', '', typing));
     const ai = el('div', 'b ai', list);
     const aiText = el('span', '', ai);
     const caret = el('i', 'caret', ai);
-    const copy = el('div', 'copy', list, '复制提示词');
+    const copy = el('div', 'copy', list, L.copy);
 
     const pop = spring({ duration: 0.45, bounce: 0.3 });
     const out = spring({ duration: 0.5, bounce: 0 });
@@ -53,9 +75,10 @@ export const chat: SceneDef = {
     const typingIn = track(0, [[1.3, 1, pop], [2.6, 0, spring({ duration: 0.25 })]]);
     const aiIn = track(0, [[2.6, 1, pop], [7.6, 0, out]]);
     const copyIn = track(0, [[5.9, 1, pop], [7.6, 0, out]]);
-    const chars = [...ANSWER];
+    const chars = [...L.answer];
     const T0 = 2.75;
-    const CPS = 13; // 每秒出几个字
+    // 每秒出几个字：中文 13 个；英文字母多，按同样的时长（约 3.1 秒）打完
+    const CPS = options.lang === 'en' ? chars.length / 3.1 : 13;
 
     const render = (t: number) => {
       const show = (node: HTMLElement, p: number, dy = 8) => {
@@ -78,7 +101,7 @@ export const chat: SceneDef = {
       caret.style.display = n < chars.length && t > T0 ? '' : 'none';
       caret.style.opacity = streaming || Math.floor(t * 2.5) % 2 === 0 ? '1' : '0';
       show(copy, copyIn(t), 4);
-      status.textContent = t > 1.3 && n < chars.length && t < 7 ? '正在输入…' : '在线';
+      status.textContent = t > 1.3 && n < chars.length && t < 7 ? L.typing : L.online;
     };
 
     return timeline({ duration: D, loop: true, render, target: host, autoplay: options.autoplay ?? true, reducedMotion: 6.6 });

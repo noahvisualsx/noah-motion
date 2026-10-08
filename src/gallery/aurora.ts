@@ -19,6 +19,10 @@ export const aurora: SceneDef = {
   description: '几团彩色光晕沿各自的轨迹缓慢流动，标题逐字从模糊里升起，再逐字沉下去。',
   tags: ['track', 'stagger', 'canvas'],
   tone: 'dark',
+  en: {
+    title: 'Aurora title',
+    description: 'Soft blobs of color drift along their own paths while the title rises letter by letter out of a blur, then sinks back.',
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-aurora');
     injectCSS(

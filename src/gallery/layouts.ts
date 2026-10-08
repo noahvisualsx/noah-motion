@@ -31,6 +31,10 @@ export const layouts: SceneDef = {
   description: '12 张卡片在一摞、网格、圆环、波浪线之间变换，每张按序号错开出发，像一群有先后的小东西在走位。',
   tags: ['track × 48', 'stagger', 'spring'],
   tone: 'light',
+  en: {
+    title: 'Layout shift',
+    description: '12 cards move between a pile, a grid, a ring and a wave, each leaving a beat after the last, like a small crowd finding its marks.',
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-layouts');
     injectCSS(
@@ -56,11 +60,12 @@ export const layouts: SceneDef = {
     });
     const line: Pose[] = cards.map((_, i) => ({ x: 320 + (i - (N - 1) / 2) * 46, y: 196 + Math.sin(i * 0.9) * 46, r: Math.cos(i * 0.9) * 22, s: 0.72 }));
 
+    const en = options.lang === 'en';
     const STEPS: { at: number; pose: Pose[]; name: string }[] = [
-      { at: 0.8, pose: grid, name: 'GRID · 网格' },
-      { at: 3.4, pose: ring, name: 'RING · 圆环' },
-      { at: 6.0, pose: line, name: 'WAVE · 波浪' },
-      { at: 8.6, pose: pile, name: 'PILE · 一摞' },
+      { at: 0.8, pose: grid, name: en ? 'GRID' : 'GRID · 网格' },
+      { at: 3.4, pose: ring, name: en ? 'RING' : 'RING · 圆环' },
+      { at: 6.0, pose: line, name: en ? 'WAVE' : 'WAVE · 波浪' },
+      { at: 8.6, pose: pile, name: en ? 'PILE' : 'PILE · 一摞' },
     ];
     const move = spring({ duration: 0.75, bounce: 0.24 });
     const tracks = cards.map((_, i) => {

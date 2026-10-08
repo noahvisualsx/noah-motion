@@ -48,6 +48,10 @@ export const tiles: SceneDef = {
   description: '40 块方砖沿对角线依次 3D 翻转，背面拼成一张完整的图，停留后再反方向翻回来。',
   tags: ['track × 40', '3D', 'stagger'],
   tone: 'dark',
+  en: {
+    title: 'Flip mosaic',
+    description: '40 tiles flip in 3D along the diagonal and their backs form one whole picture, then they flip back the other way.',
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-tiles');
     injectCSS(

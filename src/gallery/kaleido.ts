@@ -23,6 +23,11 @@ export const kaleido: SceneDef = {
   description: '只画一片 30° 的扇区，再旋转复制、隔片镜像成 12 瓣，几个图形沿周期轨迹移动，整体缓慢旋转。',
   tags: ['timeline', 'loop', '对称'],
   tone: 'dark',
+  en: {
+    title: 'Kaleidoscope',
+    description: 'Only one 30° slice is drawn, then rotated and mirrored into 12 petals. A few shapes travel looping paths while the whole thing slowly turns.',
+    tags: ['timeline', 'loop', 'symmetry'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-kaleido');
     const { ctx } = createCanvas(stage);

@@ -26,7 +26,7 @@
   <body>
     <div id="box"></div>
     <script type="module">
-      // 单独展示一个作品廊场景：scene.html?name=aurora&text=你好
+      // 单独展示一个作品廊场景：scene.html?name=aurora&text=你好（加 &lang=en 用英文的默认文字）
       // 导出视频：npx noah-motion render demo/scene.html --query "name=aurora" --size 1280x800
       import { exposeForRender } from '../dist/index.js';
       import { scenes } from '../dist/gallery/index.js';
@@ -34,8 +34,10 @@
       const params = new URLSearchParams(location.search);
       const name = params.get('name') ?? 'aurora';
       const scene = scenes[name] ?? scenes.aurora;
-      document.title = `noah-motion · ${scene.title}`;
-      const tl = scene.mount(document.getElementById('box'), { text: params.get('text') ?? undefined });
+      const lang = params.get('lang') === 'en' ? 'en' : 'zh';
+      document.title = `noah-motion · ${lang === 'en' ? scene.en.title : scene.title}`;
+      if (lang === 'en') document.documentElement.lang = 'en';
+      const tl = scene.mount(document.getElementById('box'), { text: params.get('text') ?? undefined, lang });
       exposeForRender(tl);
       if (params.has('t')) {
         tl.pause();

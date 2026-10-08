@@ -15,6 +15,11 @@ export const plane: SceneDef = {
   description: '一架纸飞机沿着带翻转圈的航线飞过，机头始终顺着航线方向，身后留下虚线轨迹。',
   tags: ['timeline', '路径切线', 'SVG'],
   tone: 'light',
+  en: {
+    title: 'Paper plane',
+    description: 'A paper plane flies a route with a loop in it, its nose always following the path, leaving a dotted trail behind.',
+    tags: ['timeline', 'path tangent', 'SVG'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-plane');
     injectCSS(
@@ -48,7 +53,7 @@ export const plane: SceneDef = {
     svg('path', { d: 'M 22 0 L -8 0', stroke: '#1d1d1f', 'stroke-width': 1.2 }, planeG);
     const cap = document.createElement('div');
     cap.className = 'cap';
-    cap.textContent = options.text ?? 'FLIGHT · 纸飞机';
+    cap.textContent = options.text ?? (options.lang === 'en' ? 'FLIGHT · PAPER PLANE' : 'FLIGHT · 纸飞机');
     stage.append(cap);
 
     const total = path.getTotalLength();

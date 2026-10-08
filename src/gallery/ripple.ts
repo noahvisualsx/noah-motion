@@ -23,6 +23,11 @@ export const ripple: SceneDef = {
   description: '点阵上落下四滴雨，每滴激起一个弹簧脉冲按距离向外扩散，几圈涟漪相遇时自然叠加。',
   tags: ['spring 脉冲', '按距离延迟', 'canvas'],
   tone: 'dark',
+  en: {
+    title: 'Ripple grid',
+    description: 'Four raindrops land on a grid of dots. Each one sends a spring pulse outward by distance, and the rings add up where they meet.',
+    tags: ['spring pulses', 'distance delay', 'canvas'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-ripple');
     const { ctx } = createCanvas(stage);

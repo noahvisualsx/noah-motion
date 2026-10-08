@@ -8,10 +8,10 @@ import { createStage, el, svg, injectCSS, type SceneDef } from './util.ts';
 
 const D = 8;
 const STOPS = [
-  { x: 96, y: 300, name: '家' },
-  { x: 252, y: 170, name: '咖啡馆' },
-  { x: 412, y: 268, name: '公园' },
-  { x: 552, y: 146, name: '工作室' },
+  { x: 96, y: 300, name: '家', en: 'Home' },
+  { x: 252, y: 170, name: '咖啡馆', en: 'Café' },
+  { x: 412, y: 268, name: '公园', en: 'Park' },
+  { x: 552, y: 146, name: '工作室', en: 'Studio' },
 ];
 // 路线沿着横平竖直的街道走，拐角处圆角
 const ROUTE = 'M 96 300 L 96 236 Q 96 220 112 220 L 236 220 Q 252 220 252 204 L 252 170 L 252 140 Q 252 124 268 124 L 380 124 Q 396 124 396 140 L 396 252 Q 396 268 412 268 L 480 268 Q 496 268 496 252 L 496 162 Q 496 146 512 146 L 552 146'; // 终点放低一点，别被右上角的距离卡片挡住
@@ -23,6 +23,11 @@ export const route: SceneDef = {
   description: '简笔地图上四个地点依次落下图钉，路线沿街道画出来，小圆点走过去，距离一起累加，到终点泛起波纹。',
   tags: ['spring', '路径长度', 'SVG'],
   tone: 'light',
+  en: {
+    title: 'Route',
+    description: 'Pins drop on four places on a sketch map, the route draws itself along the streets, a dot walks it while the distance adds up, and the finish ripples.',
+    tags: ['spring', 'path length', 'SVG'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-route');
     injectCSS(
@@ -61,12 +66,12 @@ export const route: SceneDef = {
     });
     const dot = svg('circle', { r: 7, fill: '#fff', stroke: '#0071e3', 'stroke-width': 3 }, g);
     const labels = STOPS.map((s) => {
-      const l = el('div', 'lab', stage, s.name);
+      const l = el('div', 'lab', stage, options.lang === 'en' ? s.en : s.name);
       l.style.left = `${s.x}px`;
       l.style.top = `${s.y + 8}px`;
       return l;
     });
-    const card = el('div', 'card', stage, options.text ?? '步行路线');
+    const card = el('div', 'card', stage, options.text ?? (options.lang === 'en' ? 'Walking route' : '步行路线'));
     const km = el('b', '', card);
 
     const drop = spring({ duration: 0.5, bounce: 0.4 });

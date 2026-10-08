@@ -20,6 +20,10 @@ export const breathe: SceneDef = {
   description: '同心圆跟着“吸气 / 呼气”缓慢扩张收缩，由内到外错开一点点，像水波一样柔和。',
   tags: ['spring', 'bounce = 0', 'stagger'],
   tone: 'light',
+  en: {
+    title: 'Breathe',
+    description: 'Concentric rings slowly grow and shrink with “breathe in, breathe out”, each a touch behind the one inside it, soft as ripples on water.',
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-breathe');
     injectCSS(
@@ -49,8 +53,8 @@ export const breathe: SceneDef = {
     svg.append(dash);
 
     const word = el('div', 'w', stage);
-    const inhale = el('span', '', word, options.text ?? '吸气');
-    const exhale = el('span', '', word, '呼气');
+    const inhale = el('span', '', word, options.text ?? (options.lang === 'en' ? 'Breathe in' : '吸气'));
+    const exhale = el('span', '', word, options.lang === 'en' ? 'Breathe out' : '呼气');
     const counter = el('div', 'c', stage);
 
     // 很慢、不过冲的弹簧：吸气 0.4 秒起，呼气 4.4 秒起，每圈错开 0.12 秒

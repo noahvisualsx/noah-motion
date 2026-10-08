@@ -15,6 +15,11 @@ export const fold: SceneDef = {
   description: '一张折起来的卡片，左右两页沿折痕带透视依次展开，内容逐个弹出，再原样折回去。',
   tags: ['track', '3D 透视', 'spring'],
   tone: 'light',
+  en: {
+    title: 'Trifold',
+    description: 'A folded card opens its side panels along the creases in perspective, its content pops in piece by piece, then it folds back up.',
+    tags: ['track', '3D perspective', 'spring'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-fold');
     injectCSS(
@@ -49,7 +54,7 @@ export const fold: SceneDef = {
     const midFace = el('div', 'face in', mid);
     const midItems = [
       el('div', 'k', midFace, 'NOAH-MOTION'),
-      el('div', 'h', midFace, options.text ?? '把时间写成函数'),
+      el('div', 'h', midFace, options.text ?? (options.lang === 'en' ? 'Write time as a function' : '把时间写成函数')),
       el('div', 'art', midFace),
       el('div', 'bar', midFace),
     ];
@@ -74,7 +79,7 @@ export const fold: SceneDef = {
     right.style.transformOrigin = '0 50%';
     right.style.left = `${PANEL_W}px`;
     const rightIn = el('div', 'face in', right);
-    const rightItems = [el('div', 'k', rightIn, 'TIMELINE'), el('div', 'h', rightIn, '随意拖动'), el('div', 'bar', rightIn), el('span', 'chip', rightIn, '开始 →')];
+    const rightItems = [el('div', 'k', rightIn, 'TIMELINE'), el('div', 'h', rightIn, options.lang === 'en' ? 'Scrub anywhere' : '随意拖动'), el('div', 'bar', rightIn), el('span', 'chip', rightIn, options.lang === 'en' ? 'Start →' : '开始 →')];
     const rightBack = el('div', 'face back', right);
     rightBack.style.background = '#f2f2f7';
 

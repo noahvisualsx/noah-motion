@@ -39,6 +39,11 @@ export const particles: SceneDef = {
   description: '上千个粒子按从左到右的波浪聚成文字，再按黄金角炸成一个旋转的螺旋盘，最后散回原处。',
   tags: ['track', 'spring', '每个粒子一条轨道'],
   tone: 'dark',
+  en: {
+    title: 'Particle text',
+    description: 'Over a thousand particles sweep left to right into a word, burst into a spinning golden-angle spiral, then drift back home.',
+    tags: ['track', 'spring', 'one path per particle'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-particles');
     const { ctx } = createCanvas(stage);

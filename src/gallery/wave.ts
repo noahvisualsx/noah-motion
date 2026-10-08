@@ -13,20 +13,25 @@ export const wave: SceneDef = {
   description: '一行字被拨了三下，每一下都是一次弹簧冲击，波浪带着回弹慢慢平息，字顺着波形倾斜。',
   tags: ['track 叠加冲击', 'spring', 'mixColor'],
   tone: 'light',
+  en: {
+    title: 'Wave text',
+    description: 'A line of text gets plucked three times. Each pluck is a spring impulse, the wave settles with a little bounce, and the letters tilt with the slope.',
+    tags: ['stacked impulses', 'spring', 'mixColor'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-wave');
     injectCSS(
       'nm-wave',
       `.nm-wave{background:radial-gradient(80% 90% at 50% 100%,#e9f1ff,#f6f5f1 70%)}
 .nm-wave .line{position:absolute;left:0;right:0;top:170px;text-align:center;white-space:nowrap;font-size:48px;font-weight:800;letter-spacing:-.01em}
-.nm-wave .line span{display:inline-block;transform-origin:50% 70%}
+.nm-wave .line span{display:inline-block;white-space:pre;transform-origin:50% 70%}
 .nm-wave .hint{position:absolute;left:0;right:0;top:282px;text-align:center;font-size:13px;color:#86868b;letter-spacing:.12em}
 .nm-wave .tap{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid #0071e3;opacity:0}`,
     );
     const line = el('div', 'line', stage);
-    const text = options.text ?? '每个人都有自己的闪光点';
+    const text = options.text ?? (options.lang === 'en' ? 'Find your spark' : '每个人都有自己的闪光点');
     const chars = [...text].map((ch) => el('span', '', line, ch));
-    el('div', 'hint', stage, '弹簧冲击 × 3');
+    el('div', 'hint', stage, options.lang === 'en' ? 'SPRING IMPULSES × 3' : '弹簧冲击 × 3');
     const taps = [0, 1, 2].map(() => el('div', 'tap', stage));
 
     // 三次“拨动”：振幅突然被推高，然后弹簧带着回弹回到 0

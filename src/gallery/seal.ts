@@ -13,6 +13,11 @@ export const seal: SceneDef = {
   description: '宣纸上竖排的字从上往下写出来，一方红印从空中落下，盖下去时压扁一下，留下带纸纹的印迹。',
   tags: ['spring', '挤压与回弹', 'SVG 滤镜'],
   tone: 'light',
+  en: {
+    title: 'Seal',
+    description: 'Vertical Chinese calligraphy is brushed onto rice paper from top to bottom, then a red seal drops from above, squashes as it lands and leaves a textured print.',
+    tags: ['spring', 'squash & stretch', 'SVG filters'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'light', 'nm-seal');
     injectCSS(

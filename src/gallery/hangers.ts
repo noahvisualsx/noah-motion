@@ -18,8 +18,13 @@ export const hangers: SceneDef = {
   description: '一排标签挂在横杆上，三阵风从左往右吹过，标签依次摆动，摆幅越来越小，慢慢停下。',
   tags: ['spring', '叠加冲击', '周期折回'],
   tone: 'light',
+  en: {
+    title: 'Hang tags',
+    description: 'A row of tags hangs from a rail. Three gusts blow through from left to right and the tags swing one after another, a little less each time, until they settle.',
+    tags: ['spring', 'stacked impulses', 'periodic wrap'],
+  },
   mount(host, options = {}) {
-    const words = (options.text ?? '灵感 提示词 作品 视频 动效').split(/\s+/).filter(Boolean).slice(0, 6);
+    const words = (options.text ?? (options.lang === 'en' ? 'Ideas Prompts Works Videos Motion' : '灵感 提示词 作品 视频 动效')).split(/\s+/).filter(Boolean).slice(0, 6);
     const stage = createStage(host, 'light', 'nm-hang');
     injectCSS(
       'nm-hang',

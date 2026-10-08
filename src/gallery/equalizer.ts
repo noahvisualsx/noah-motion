@@ -18,6 +18,11 @@ export const equalizer: SceneDef = {
   description: '32 根音柱跟着 120 BPM 的鼓点跳，底鼓、军鼓、踩镲分别打在不同频段，每一下都是一次弹簧脉冲。',
   tags: ['spring 脉冲', '周期折回', 'canvas'],
   tone: 'dark',
+  en: {
+    title: 'Beat',
+    description: '32 bars dance to a 120 BPM beat. Kick, snare and hi-hat each hit a different band, and every hit is a spring pulse.',
+    tags: ['spring pulses', 'periodic wrap', 'canvas'],
+  },
   mount(host, options = {}) {
     const stage = createStage(host, 'dark', 'nm-eq');
     injectCSS(

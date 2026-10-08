@@ -56,5 +56,6 @@ export const scenes = {
 } satisfies Record<string, SceneDef>;
 
 export type SceneName = keyof typeof scenes;
-export type { SceneDef, SceneOptions, Tone, Category } from './util.ts';
+export type { SceneDef, SceneOptions, Tone, Category, Lang } from './util.ts';
+export { CATEGORY_EN } from './util.ts';
 export { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe, chart, seal, kaleido, equalizer, plane, tiles, hangers, chat, petals, route };
