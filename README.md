@@ -97,7 +97,7 @@ reveal('.card', { y: 24, blur: 6, stagger: 0.06 });
 
 ## 作品廊 `noah-motion/gallery`
 
-21 个用 noah-motion 做的原创动画场景，一行代码挂到页面上（容器需要有宽高，推荐 `aspect-ratio: 16 / 10`）：
+31 个用 noah-motion 做的原创动画场景，一行代码挂到页面上（容器需要有宽高，推荐 `aspect-ratio: 16 / 10`）：
 
 ```js
 import { scenes } from 'noah-motion/gallery';
@@ -109,13 +109,13 @@ tl.seek(3.2);
 
 | 分类 | 场景（名字） |
 |---|---|
-| 文字 | 极光标题 `aurora`、粒子成字 `particles`、印章 `seal`、波浪字 `wave` |
-| 界面 | AI 对话 `chat`、布局变换 `layouts`、三折页 `fold`、路线 `route` |
-| 数据 | 滚轮数字 `odometer`、数据生长 `chart` |
-| 图形 | 翻牌拼图 `tiles`、万花筒 `kaleido`、涟漪点阵 `ripple`、几何构成 `bauhaus`、节拍 `equalizer`、水滴合体 `metaballs`、星轨 `orbits`、呼吸 `breathe` |
-| 插画 | 樱花雨 `petals`、纸飞机 `plane`、吊牌 `hangers` |
+| 文字 | 极光标题 `aurora`、粒子成字 `particles`、印章 `seal`、波浪字 `wave`、翻页站牌 `splitflap`、解码文字 `decode` |
+| 界面 | AI 对话 `chat`、布局变换 `layouts`、三折页 `fold`、路线 `route`、胶囊变形 `pill`、控件手感 `controls` |
+| 数据 | 滚轮数字 `odometer`、数据生长 `chart`、排行赛跑 `barrace`、活跃热力图 `contrib` |
+| 图形 | 翻牌拼图 `tiles`、万花筒 `kaleido`、涟漪点阵 `ripple`、几何构成 `bauhaus`、节拍 `equalizer`、水滴合体 `metaballs`、星轨 `orbits`、呼吸 `breathe`、乘法弦图 `modular`、形状变形 `morph` |
+| 插画 | 樱花雨 `petals`、纸飞机 `plane`、吊牌 `hangers`、窗外一天 `daylight`、烟花 `fireworks` |
 
-选项：`text` 换掉场景里的文字，`image` 给翻牌拼图换图片，`autoplay: false` 先不播放，`lang: 'en'` 让场景里的默认文字换成英文。每个场景都首尾相接、可以无缝循环。
+选项：`text` 换掉场景里的文字（翻页站牌、解码文字用 `/` 分成两行），`image` 给翻牌拼图换图片，`autoplay: false` 先不播放，`lang: 'en'` 让场景里的默认文字换成英文。每个场景都首尾相接、可以无缝循环。
 
 每个场景除了中文的 `title`、`description`，还有英文版 `scene.en.title`、`scene.en.description`；分类的英文名在 `CATEGORY_EN` 里。
 

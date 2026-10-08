@@ -28,20 +28,40 @@ import { hangers } from './hangers.ts';
 import { chat } from './chat.ts';
 import { petals } from './petals.ts';
 import { route } from './route.ts';
+import { splitflap } from './splitflap.ts';
+import { decode } from './decode.ts';
+import { pill } from './pill.ts';
+import { controls } from './controls.ts';
+import { barrace } from './barrace.ts';
+import { contrib } from './contrib.ts';
+import { modular } from './modular.ts';
+import { morph } from './morph.ts';
+import { daylight } from './daylight.ts';
+import { fireworks } from './fireworks.ts';
 import type { SceneDef } from './util.ts';
 
 // 排列顺序就是作品廊里的顺序：深浅交错、类型错开
 export const scenes = {
   aurora,
+  pill,
   chat,
+  fireworks,
   particles,
+  daylight,
   tiles,
+  barrace,
   layouts,
+  splitflap,
   seal,
+  controls,
   odometer,
+  modular,
   kaleido,
+  morph,
   fold,
+  decode,
   petals,
+  contrib,
   ripple,
   chart,
   bauhaus,
@@ -59,3 +79,4 @@ export type SceneName = keyof typeof scenes;
 export type { SceneDef, SceneOptions, Tone, Category, Lang } from './util.ts';
 export { CATEGORY_EN } from './util.ts';
 export { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe, chart, seal, kaleido, equalizer, plane, tiles, hangers, chat, petals, route };
+export { splitflap, decode, pill, controls, barrace, contrib, modular, morph, daylight, fireworks };
