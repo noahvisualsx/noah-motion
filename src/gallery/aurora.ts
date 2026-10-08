@@ -15,6 +15,7 @@ const BLOBS = [
 
 export const aurora: SceneDef = {
   title: '极光标题',
+  category: '文字',
   description: '几团彩色光晕沿各自的轨迹缓慢流动，标题逐字从模糊里升起，再逐字沉下去。',
   tags: ['track', 'stagger', 'canvas'],
   tone: 'dark',

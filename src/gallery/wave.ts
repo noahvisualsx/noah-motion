@@ -9,6 +9,7 @@ const D = 6;
 
 export const wave: SceneDef = {
   title: '波浪字',
+  category: '文字',
   description: '一行字被拨了三下，每一下都是一次弹簧冲击，波浪带着回弹慢慢平息，字顺着波形倾斜。',
   tags: ['track 叠加冲击', 'spring', 'mixColor'],
   tone: 'light',

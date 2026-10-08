@@ -27,6 +27,7 @@ type Pose = { x: number; y: number; r: number; s: number };
 
 export const layouts: SceneDef = {
   title: '布局变换',
+  category: '界面',
   description: '12 张卡片在一摞、网格、圆环、波浪线之间变换，每张按序号错开出发，像一群有先后的小东西在走位。',
   tags: ['track × 48', 'stagger', 'spring'],
   tone: 'light',

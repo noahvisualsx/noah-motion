@@ -14,6 +14,7 @@ const BODIES = [
 
 export const orbits: SceneDef = {
   title: '星轨',
+  category: '图形',
   description: '几颗星体沿倾斜的椭圆轨道运行，拖着渐隐的尾迹。每条轨道的周期都能整除总时长，整段无缝循环。',
   tags: ['timeline', 'loop', 'canvas'],
   tone: 'dark',

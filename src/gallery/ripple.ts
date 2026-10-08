@@ -19,6 +19,7 @@ const DROPS = [
 
 export const ripple: SceneDef = {
   title: '涟漪点阵',
+  category: '图形',
   description: '点阵上落下四滴雨，每滴激起一个弹簧脉冲按距离向外扩散，几圈涟漪相遇时自然叠加。',
   tags: ['spring 脉冲', '按距离延迟', 'canvas'],
   tone: 'dark',

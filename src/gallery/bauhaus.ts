@@ -29,6 +29,7 @@ const SHAPES: Shape[] = [
 
 export const bauhaus: SceneDef = {
   title: '几何构成',
+  category: '图形',
   description: '包豪斯风格：圆、半圆、三角、色条从画面外带着旋转飞进来拼成一幅构图，停留时轻轻呼吸，再各自退场。',
   tags: ['track', 'spring', '构图'],
   tone: 'light',

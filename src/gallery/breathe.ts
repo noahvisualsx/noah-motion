@@ -16,6 +16,7 @@ const RINGS = [
 
 export const breathe: SceneDef = {
   title: '呼吸',
+  category: '图形',
   description: '同心圆跟着“吸气 / 呼气”缓慢扩张收缩，由内到外错开一点点，像水波一样柔和。',
   tags: ['spring', 'bounce = 0', 'stagger'],
   tone: 'light',
@@ -43,7 +44,8 @@ export const breathe: SceneDef = {
       return c;
     });
     const dash = document.createElementNS(NS, 'circle');
-    Object.entries({ cx: '320', cy: '200', r: '196', fill: 'none', stroke: 'rgba(0,113,227,0.35)', 'stroke-width': '1.5', 'stroke-dasharray': '2 9', 'stroke-linecap': 'round' }).forEach(([k, v]) => dash.setAttribute(k, v));
+    // pathLength=120：整圈正好 120 个点，每轮转 60° 刚好错开 20 个点，循环时看不出接缝
+    Object.entries({ cx: '320', cy: '200', r: '196', fill: 'none', stroke: 'rgba(0,113,227,0.35)', 'stroke-width': '1.5', pathLength: '120', 'stroke-dasharray': '0.15 0.85', 'stroke-linecap': 'round' }).forEach(([k, v]) => dash.setAttribute(k, v));
     svg.append(dash);
 
     const word = el('div', 'w', stage);

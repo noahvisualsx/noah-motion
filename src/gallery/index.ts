@@ -18,10 +18,43 @@ import { layouts } from './layouts.ts';
 import { bauhaus } from './bauhaus.ts';
 import { metaballs } from './metaballs.ts';
 import { orbits } from './orbits.ts';
+import { chart } from './chart.ts';
+import { seal } from './seal.ts';
+import { kaleido } from './kaleido.ts';
+import { equalizer } from './equalizer.ts';
+import { plane } from './plane.ts';
+import { tiles } from './tiles.ts';
+import { hangers } from './hangers.ts';
+import { chat } from './chat.ts';
+import { petals } from './petals.ts';
+import { route } from './route.ts';
 import type { SceneDef } from './util.ts';
 
-export const scenes = { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe } satisfies Record<string, SceneDef>;
+// 排列顺序就是作品廊里的顺序：深浅交错、类型错开
+export const scenes = {
+  aurora,
+  chat,
+  particles,
+  tiles,
+  layouts,
+  seal,
+  odometer,
+  kaleido,
+  fold,
+  petals,
+  ripple,
+  chart,
+  bauhaus,
+  equalizer,
+  metaballs,
+  plane,
+  wave,
+  orbits,
+  hangers,
+  route,
+  breathe,
+} satisfies Record<string, SceneDef>;
 
 export type SceneName = keyof typeof scenes;
-export type { SceneDef, SceneOptions, Tone } from './util.ts';
-export { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe };
+export type { SceneDef, SceneOptions, Tone, Category } from './util.ts';
+export { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe, chart, seal, kaleido, equalizer, plane, tiles, hangers, chat, petals, route };

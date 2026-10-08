@@ -18,6 +18,7 @@ const DROPS = [
 
 export const metaballs: SceneDef = {
   title: '水滴合体',
+  category: '图形',
   description: '五颗水滴绕着中心转，被弹簧收拢时融成一大滴，再带着回弹分开。',
   tags: ['spring', '场 + 阈值', 'canvas'],
   tone: 'light',

@@ -10,6 +10,7 @@ const DIGIT_H = 96;
 
 export const odometer: SceneDef = {
   title: '滚轮数字',
+  category: '数据',
   description: '每一位都是一条滚轮，数值由弹簧驱动。滚得越快越模糊，模糊程度直接来自弹簧的速度。',
   tags: ['spring', 'velocity', 'track'],
   tone: 'light',

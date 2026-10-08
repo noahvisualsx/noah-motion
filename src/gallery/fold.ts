@@ -11,6 +11,7 @@ const PANEL_H = 220;
 
 export const fold: SceneDef = {
   title: '三折页',
+  category: '界面',
   description: '一张折起来的卡片，左右两页沿折痕带透视依次展开，内容逐个弹出，再原样折回去。',
   tags: ['track', '3D 透视', 'spring'],
   tone: 'light',

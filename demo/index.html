@@ -492,6 +492,50 @@
           display: none;
         }
       }
+      .filters {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin: 0 0 20px;
+      }
+      .filters button {
+        height: 34px;
+        padding: 0 14px;
+        background: var(--sunk);
+        color: var(--ink-2);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .filters button span {
+        margin-left: 6px;
+        font-size: 12px;
+        opacity: 0.7;
+        font-variant-numeric: tabular-nums;
+      }
+      .filters button[aria-selected='true'] {
+        background: var(--ink);
+        color: var(--bg);
+      }
+      .scard[hidden] {
+        display: none;
+      }
+      .scard .box.light {
+        background: #f4f4f1;
+      }
+      .scard .box.dark {
+        background: #0b0b0d;
+      }
+      .scard h3 em {
+        margin-left: auto;
+        font-style: normal;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-2);
+      }
+      .ctrl button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
     </style>
   </head>
   <body>
@@ -519,7 +563,8 @@
 
       <section id="gallery">
         <h2>作品廊</h2>
-        <p>用 noah-motion 做的原创动画场景，都在 <code>noah-motion/gallery</code> 里，一行代码就能挂到页面上。每一个都是时间的纯函数：可以暂停、拖到任意一帧，也能导出成视频。</p>
+        <p><span id="sceneCount">21</span> 个用 noah-motion 做的原创动画场景，都在 <code>noah-motion/gallery</code> 里，一行代码就能挂到页面上。每一个都是时间的纯函数：可以暂停、拖到任意一帧，也能导出成视频。</p>
+        <div class="filters" id="filters" role="tablist" aria-label="按分类筛选"></div>
         <div class="gallery" id="galleryGrid"></div>
         <pre><code>import { scenes } from 'noah-motion/gallery';
 const tl = scenes.particles.mount(box, { text: '你好' });
@@ -656,54 +701,91 @@ npx noah-motion render demo/scene.html --query name=orbits --out orbits.mp4 --si
       scenes.aurora.mount(document.getElementById('banner'), { text: '把时间写成函数' });
 
       const grid = document.getElementById('galleryGrid');
+      const cards = [];
       Object.entries(scenes).forEach(([name, scene], i) => {
         const card = document.createElement('article');
         card.className = 'scard';
+        card.dataset.category = scene.category;
         card.innerHTML = `
-          <div class="box"></div>
+          <div class="box ${scene.tone}"></div>
           <div class="info">
-            <h3><small>${String(i + 1).padStart(2, '0')}</small>${scene.title}</h3>
+            <h3><small>${String(i + 1).padStart(2, '0')}</small>${scene.title}<em>${scene.category}</em></h3>
             <p>${scene.description}</p>
             <div class="tags">${scene.tags.map((t) => `<code>${t}</code>`).join('')}</div>
             <div class="ctrl">
-              <button type="button" aria-label="暂停">${PAUSE}</button>
-              <input type="range" min="0" max="1000" value="0" aria-label="${scene.title}的播放进度" />
+              <button type="button" aria-label="播放" disabled>${PLAY}</button>
+              <input type="range" min="0" max="1000" value="0" aria-label="${scene.title}的播放进度" disabled />
               <span class="time">0.0s</span>
               <a href="./scene.html?name=${name}" target="_blank" rel="noopener">全屏 ↗</a>
             </div>
           </div>`;
         grid.append(card);
-        const tl = scene.mount(card.querySelector('.box'));
-        const btn = card.querySelector('button');
-        const range = card.querySelector('input');
-        const time = card.querySelector('.time');
-        const sync = () => {
-          btn.innerHTML = tl.playing ? PAUSE : PLAY;
-          btn.setAttribute('aria-label', tl.playing ? '暂停' : '播放');
-          range.value = String(Math.round((tl.time / tl.duration) * 1000));
-          time.textContent = tl.time.toFixed(1) + 's';
-        };
-        // 进度条只在卡片可见、正在播放时更新
-        let visible = false;
-        const loop = () => {
+        cards.push(card);
+
+        // 懒挂载：卡片快滚进屏幕时才创建动画
+        const mountIt = () => {
+          const tl = scene.mount(card.querySelector('.box'));
+          const btn = card.querySelector('button');
+          const range = card.querySelector('input');
+          const time = card.querySelector('.time');
+          btn.disabled = range.disabled = false;
+          const sync = () => {
+            btn.innerHTML = tl.playing ? PAUSE : PLAY;
+            btn.setAttribute('aria-label', tl.playing ? '暂停' : '播放');
+            range.value = String(Math.round((tl.time / tl.duration) * 1000));
+            time.textContent = tl.time.toFixed(1) + 's';
+          };
+          // 进度条只在卡片可见、正在播放时更新
+          let visible = true;
+          const loop = () => {
+            sync();
+            if (visible && tl.playing) requestAnimationFrame(loop);
+          };
+          new IntersectionObserver(([e]) => {
+            visible = e.isIntersecting;
+            if (visible) requestAnimationFrame(loop);
+          }).observe(card);
+          btn.onclick = () => {
+            tl.playing ? tl.pause() : tl.play();
+            sync();
+            requestAnimationFrame(loop);
+          };
+          range.oninput = () => {
+            tl.pause();
+            tl.seek((Number(range.value) / 1000) * tl.duration);
+            sync();
+          };
           sync();
-          if (visible && tl.playing) requestAnimationFrame(loop);
         };
-        new IntersectionObserver(([e]) => {
-          visible = e.isIntersecting;
-          if (visible) requestAnimationFrame(loop);
-        }).observe(card);
-        btn.onclick = () => {
-          tl.playing ? tl.pause() : tl.play();
-          sync();
-          requestAnimationFrame(loop);
+        const lazy = new IntersectionObserver(
+          ([e]) => {
+            if (!e.isIntersecting) return;
+            lazy.disconnect();
+            mountIt();
+          },
+          { rootMargin: '400px 0px' },
+        );
+        lazy.observe(card);
+      });
+
+      document.getElementById('sceneCount').textContent = String(cards.length);
+
+      // 分类筛选
+      const filters = document.getElementById('filters');
+      const ORDER = ['文字', '界面', '数据', '图形', '插画'];
+      const cats = ['全部', ...ORDER.filter((c) => cards.some((card) => card.dataset.category === c))];
+      cats.forEach((cat, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('role', 'tab');
+        b.setAttribute('aria-selected', String(i === 0));
+        const count = cat === '全部' ? cards.length : cards.filter((c) => c.dataset.category === cat).length;
+        b.innerHTML = `${cat}<span>${count}</span>`;
+        b.onclick = () => {
+          filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+          cards.forEach((c) => (c.hidden = cat !== '全部' && c.dataset.category !== cat));
         };
-        range.oninput = () => {
-          tl.pause();
-          tl.seek((Number(range.value) / 1000) * tl.duration);
-          sync();
-        };
-        sync();
+        filters.append(b);
       });
 
       const $ = (id) => document.getElementById(id);

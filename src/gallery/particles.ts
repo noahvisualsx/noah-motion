@@ -35,6 +35,7 @@ function sampleText(text: string, step = 5) {
 
 export const particles: SceneDef = {
   title: '粒子成字',
+  category: '文字',
   description: '上千个粒子按从左到右的波浪聚成文字，再按黄金角炸成一个旋转的螺旋盘，最后散回原处。',
   tags: ['track', 'spring', '每个粒子一条轨道'],
   tone: 'dark',

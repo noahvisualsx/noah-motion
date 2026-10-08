@@ -14,13 +14,19 @@ export type Tone = 'light' | 'dark';
 export interface SceneOptions {
   /** 场景里用到的文字（标题、粒子文字等），不传就用场景自己的默认值 */
   text?: string;
+  /** 场景里用到的图片地址（比如翻牌拼图），不传就用场景自己生成的图 */
+  image?: string;
   /** 创建后是否立刻播放。默认 true；开了“减少动态效果”时总是先停在静止画面 */
   autoplay?: boolean;
 }
 
+export type Category = '文字' | '界面' | '数据' | '图形' | '插画';
+
 export interface SceneDef {
   /** 中文名 */
   title: string;
+  /** 分类，作品廊按它筛选 */
+  category: Category;
   /** 一句话说明 */
   description: string;
   /** 用到的 noah-motion 能力 */
@@ -82,6 +88,15 @@ export function injectCSS(id: string, css: string) {
   document.head.append(style);
 }
 
+const SVG_NS = 'http://www.w3.org/2000/svg';
+/** 创建 SVG 元素：svg('circle', { cx: 10, r: 4 }, parent) */
+export function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}, parent?: Element) {
+  const node = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
+  parent?.append(node);
+  return node;
+}
+
 /** 创建元素的小工具 */
 export function el<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', parent?: HTMLElement, text?: string) {
   const node = document.createElement(tag);
@@ -110,5 +125,8 @@ export const smooth = (e0: number, e1: number, x: number) => {
   const k = Math.min(1, Math.max(0, (x - e0) / (e1 - e0)));
   return k * k * (3 - 2 * k);
 };
+
+/** 周期为 D 的“时间差”：把 t − at 折回 [0, D)，用来让循环开头也能看到上一轮末尾的余波 */
+export const wrap = (t: number, at: number, D: number) => (((t - at) % D) + D) % D;
 
 export type { Timeline };
