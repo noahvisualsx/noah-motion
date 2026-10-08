@@ -49,7 +49,12 @@ export const splitflap: SceneDef = {
   mount(host, options = {}) {
     const en = options.lang === 'en';
     const phrases = PHRASES[en ? 'en' : 'zh'].map((p) => [...p]);
-    if (options.text) phrases[0] = options.text.split(/\s*[/\n]\s*/).slice(0, ROWS);
+    // text 用 / 分行、用 | 分组：'第一行/第二行|下一组第一行/第二行'，最多三组，不够三组时轮流重复
+    if (options.text) {
+      const groups = options.text.split('|').map((g) => g.split(/\s*[/\n]\s*/).slice(0, ROWS));
+      groups.slice(0, 3).forEach((g, i) => (phrases[i] = g));
+      for (let i = groups.length; i < 3 && groups.length > 1; i++) phrases[i] = groups[i % groups.length]!;
+    }
     const grids = phrases.map(layout);
     const pool = en ? [...LATIN] : [...new Set(phrases.flat().join('').replace(/\s/g, ''))];
 

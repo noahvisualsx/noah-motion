@@ -46,8 +46,10 @@ export const decode: SceneDef = {
   mount(host, options = {}) {
     const en = options.lang === 'en';
     const phrases = PHRASES[en ? 'en' : 'zh'].map((p) => [...p]);
-    if (options.text) phrases[0] = options.text.split(/\s*[/\n]\s*/).slice(0, 2);
-    const pool = [...(en ? LATIN : CJK)];
+    // text 用 / 分行、用 | 分成两句：'第一行/第二行|第二句第一行/第二行'
+    if (options.text) options.text.split('|').slice(0, 2).forEach((g, i) => (phrases[i] = g.split(/\s*[/\n]\s*/).slice(0, 2)));
+    const latinPool = [...LATIN];
+    const cjkPool = [...CJK];
 
     const stage = createStage(host, 'dark', 'nm-decode');
     injectCSS(
@@ -58,8 +60,8 @@ export const decode: SceneDef = {
 .nm-decode .act.en .line{font-size:40px}
 .nm-decode .act.zh .line{font-size:44px}
 .nm-decode .line span{display:inline-block;text-align:center}
-.nm-decode .act.en .line span{width:.62em}
-.nm-decode .act.zh .line span{width:1.05em}
+.nm-decode .line span{width:.62em}
+.nm-decode .line span.w{width:1.05em}
 .nm-decode .cap{position:absolute;left:170px;right:170px;top:282px;display:flex;justify-content:space-between;font-family:"SF Mono",ui-monospace,Menlo,"PingFang SC",monospace;font-size:12px;letter-spacing:.14em;color:#64d2ff}
 .nm-decode .bar{position:absolute;left:170px;right:170px;top:304px;height:2px;border-radius:1px;background:rgba(100,210,255,.15);overflow:hidden}
 .nm-decode .bar i{position:absolute;left:0;top:0;bottom:0;width:100%;background:#64d2ff;transform-origin:0 50%;box-shadow:0 0 8px #64d2ff}`,
@@ -68,20 +70,23 @@ export const decode: SceneDef = {
     const acts = phrases.map((lines, ai) => {
       const box = el('div', `act ${en ? 'en' : 'zh'}`, stage);
       const act = ACTS[ai]!;
-      const chars: { node: HTMLElement; ch: string; i: number; lockAt: number; showAt: number; outAt: number }[] = [];
+      const chars: { node: HTMLElement; ch: string; i: number; wide: boolean; lockAt: number; showAt: number; outAt: number }[] = [];
       const rnd = seeded(40 + ai);
       const total = lines.join('').replace(/\s/g, '').length;
       let i = 0;
       for (const text of lines) {
         const line = el('div', 'line', box);
         for (const ch of text) {
-          const node = el('span', '', line, ch === ' ' ? ' ' : '');
+          // 中文字占满一格，字母数字只占六成宽，两种混排时也不会撑开
+          const wide = /[\u2e80-\u9fff\uff00-\uffef]/.test(ch);
+          const node = el('span', wide ? 'w' : '', line, ch === ' ' ? ' ' : '');
           if (ch === ' ') continue;
           const k = i / Math.max(1, total - 1);
           chars.push({
             node,
             ch,
             i,
+            wide,
             showAt: act.from + k * 0.35,
             lockAt: act.from + 0.45 + k * (act.lock - act.from - 0.45) + (rnd() - 0.5) * 0.12,
             outAt: act.out + (1 - k) * (act.end - act.out - 0.2),
@@ -127,6 +132,7 @@ export const decode: SceneDef = {
             c.node.style.textShadow = `0 0 ${14 * (1 - k)}px rgba(100,210,255,${0.9 * (1 - k)})`;
             c.node.style.opacity = '1';
           } else {
+            const pool = c.wide ? cjkPool : latinPool;
             c.node.textContent = pool[hash(c.i + act.from * 100, tick) % pool.length]!;
             c.node.style.color = '#64d2ff';
             c.node.style.textShadow = 'none';
