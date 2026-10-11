@@ -38,41 +38,61 @@ import { modular } from './modular.ts';
 import { morph } from './morph.ts';
 import { daylight } from './daylight.ts';
 import { fireworks } from './fireworks.ts';
+import { diffusion } from './diffusion.ts';
+import { selling } from './selling.ts';
+import { layers } from './layers.ts';
+import { wireframe } from './wireframe.ts';
+import { nodes } from './nodes.ts';
+import { palette } from './palette.ts';
+import { camera } from './camera.ts';
+import { ink } from './ink.ts';
+import { glass } from './glass.ts';
+import { gitgraph } from './gitgraph.ts';
 import type { SceneDef } from './util.ts';
 
 // 排列顺序就是作品廊里的顺序：深浅交错、类型错开
 export const scenes = {
   aurora,
-  pill,
-  chat,
+  selling,
+  diffusion,
+  ink,
   fireworks,
-  particles,
+  wireframe,
+  layers,
+  palette,
+  glass,
   daylight,
+  nodes,
+  pill,
+  gitgraph,
+  metaballs,
+  camera,
+  hangers,
+  particles,
+  plane,
+  splitflap,
+  morph,
+  equalizer,
+  wave,
+  ripple,
+  chat,
   tiles,
   barrace,
-  layouts,
-  splitflap,
-  seal,
-  controls,
-  odometer,
-  modular,
   kaleido,
-  morph,
-  fold,
+  layouts,
+  modular,
+  seal,
   decode,
-  petals,
+  controls,
+  orbits,
+  odometer,
+  breathe,
+  fold,
   contrib,
-  ripple,
   chart,
   bauhaus,
-  equalizer,
-  metaballs,
-  plane,
-  wave,
-  orbits,
-  hangers,
+  petals,
   route,
-  breathe,
 } satisfies Record<string, SceneDef>;
 
 export type SceneName = keyof typeof scenes;
@@ -80,3 +100,4 @@ export type { SceneDef, SceneOptions, Tone, Category, Lang } from './util.ts';
 export { CATEGORY_EN } from './util.ts';
 export { aurora, particles, layouts, odometer, fold, ripple, bauhaus, metaballs, wave, orbits, breathe, chart, seal, kaleido, equalizer, plane, tiles, hangers, chat, petals, route };
 export { splitflap, decode, pill, controls, barrace, contrib, modular, morph, daylight, fireworks };
+export { diffusion, selling, layers, wireframe, nodes, palette, camera, ink, glass, gitgraph };
