@@ -4,10 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>noah-motion 演示</title>
-    <meta name="description" content="noah-motion：零依赖的小型动画库，闭式弹簧、可拖动时间轴、网页动效小工具，还能把动画导出成视频。" />
+    <meta name="description" content="noah-motion：零依赖的小型动画库，闭式弹簧、可拖动时间轴、网页动效小工具，41 个原创动画场景，还能把动画导出成视频。" />
     <meta property="og:title" content="noah-motion" />
-    <meta property="og:description" content="零依赖的小型动画库：闭式弹簧、可拖动的时间轴、网页动效，还能把动画逐帧导出成视频。" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:description" content="零依赖的小型动画库：闭式弹簧、可拖动的时间轴、41 个原创动画场景，还能把动画逐帧导出成视频。" />
+    <meta property="og:image" content="https://noah-motion.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://noah-motion.vercel.app" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@noahvisualsx" />
     <meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
@@ -362,10 +366,11 @@
       }
       main {
         max-width: 1120px;
+        padding-top: 40px;
       }
       .banner {
         position: relative;
-        aspect-ratio: 16 / 7;
+        aspect-ratio: 16 / 6;
         border-radius: 26px;
         overflow: hidden;
         margin-bottom: 40px;
@@ -536,6 +541,122 @@
         opacity: 0.4;
         cursor: default;
       }
+      /* 首屏：新增提示 + 关键数字 */
+      .news {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin: 14px 0 4px;
+        padding: 5px 14px 5px 5px;
+        border-radius: 999px;
+        background: var(--elev);
+        box-shadow: var(--shadow);
+        color: var(--ink);
+        font-size: 14px;
+        text-decoration: none;
+        max-width: 100%;
+      }
+      .news b {
+        flex-shrink: 0;
+        font-size: 12px;
+        color: #fff;
+        background: var(--accent);
+        border-radius: 999px;
+        padding: 2px 9px;
+      }
+      .news > span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .news i {
+        font-style: normal;
+        color: var(--ink-2);
+        transition: transform 0.2s;
+      }
+      .news:hover i {
+        transform: translateX(3px);
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(4, max-content);
+        gap: 12px 44px;
+        margin: 22px 0 6px;
+      }
+      @media (max-width: 560px) {
+        .facts {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .facts div {
+        margin: 0;
+      }
+      .facts dt {
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+      .facts dt small {
+        font-size: 16px;
+        margin-left: 2px;
+        color: var(--ink-2);
+      }
+      .facts dd {
+        margin: 0;
+        font-size: 13px;
+        color: var(--ink-2);
+      }
+      /* 作品廊：宽屏三列，新场景带角标，点画面直接全屏 */
+      @media (min-width: 1080px) {
+        .gallery {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+        .scard h3 {
+          font-size: 17px;
+        }
+        .scard p {
+          font-size: 14px;
+        }
+      }
+      .scard {
+        transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s;
+      }
+      @media (hover: hover) {
+        .scard:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+      }
+      .scard .box {
+        cursor: zoom-in;
+      }
+      .scard .badge {
+        align-self: center;
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.6;
+        color: #fff;
+        background: var(--accent);
+        border-radius: 999px;
+        padding: 0 7px;
+      }
+      .filters button.is-new span {
+        color: var(--accent);
+        opacity: 1;
+      }
+      .filters button.is-new[aria-selected='true'] span {
+        color: inherit;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .scard,
+        .news i {
+          transition: none;
+        }
+      }
     </style>
   </head>
   <body>
@@ -554,7 +675,14 @@
       <div class="banner" id="banner" aria-label="极光标题动画"></div>
       <h1>noah-motion</h1>
       <p class="lede">零依赖的小型动画库。闭式弹簧、可以随意拖动的时间轴、几个常用的网页动效，同一份动画既能在网页上播放，也能逐帧导出成视频。</p>
-      <p class="meta">gzip 后约 8KB · TypeScript · 默认照顾“减少动态效果”设置 · MIT</p>
+      <a class="news" href="#gallery" data-jump="新增"><b>新</b><span>作品廊新增 <span id="newCount">10</span> 个场景：主图卖点、扩散出图、水墨晕染…</span><i aria-hidden="true">→</i></a>
+      <dl class="facts">
+        <div><dt><span id="factScenes">41</span></dt><dd>原创场景</dd></div>
+        <div><dt>0</dt><dd>运行时依赖</dd></div>
+        <div><dt>8<small>KB</small></dt><dd>gzip 后</dd></div>
+        <div><dt>60<small>fps</small></dt><dd>逐帧导出 MP4</dd></div>
+      </dl>
+      <p class="meta">TypeScript · 默认照顾“减少动态效果”设置 · MIT</p>
       <div class="row" style="margin-top: 20px">
         <a class="pill-link primary" href="https://github.com/noahvisualsx/noah-motion">在 GitHub 上查看</a>
         <a class="pill-link" href="#gallery">看作品廊 ↓</a>
@@ -700,16 +828,21 @@ npx noah-motion render demo/scene.html --query name=orbits --out orbits.mp4 --si
       // 顶部横幅：极光标题，铺满不带控件
       scenes.aurora.mount(document.getElementById('banner'), { text: '把时间写成函数' });
 
+      // 最近一次新增的场景：卡片带“新”角标，筛选里多一个“新增”
+      const NEW = new Set(['selling', 'diffusion', 'ink', 'wireframe', 'layers', 'palette', 'glass', 'nodes', 'gitgraph', 'camera']);
+
       const grid = document.getElementById('galleryGrid');
       const cards = [];
       Object.entries(scenes).forEach(([name, scene], i) => {
         const card = document.createElement('article');
         card.className = 'scard';
+        card.id = 'scene-' + name;
         card.dataset.category = scene.category;
+        card.dataset.new = String(NEW.has(name));
         card.innerHTML = `
-          <div class="box ${scene.tone}"></div>
+          <div class="box ${scene.tone}" title="全屏播放"></div>
           <div class="info">
-            <h3><small>${String(i + 1).padStart(2, '0')}</small>${scene.title}<em>${scene.category}</em></h3>
+            <h3><small>${String(i + 1).padStart(2, '0')}</small>${scene.title}${NEW.has(name) ? '<b class="badge">新</b>' : ''}<em>${scene.category}</em></h3>
             <p>${scene.description}</p>
             <div class="tags">${scene.tags.map((t) => `<code>${t}</code>`).join('')}</div>
             <div class="ctrl">
@@ -721,6 +854,8 @@ npx noah-motion render demo/scene.html --query name=orbits --out orbits.mp4 --si
           </div>`;
         grid.append(card);
         cards.push(card);
+        // 点画面直接打开全屏
+        card.querySelector('.box').addEventListener('click', () => window.open(`./scene.html?name=${name}`, '_blank', 'noopener'));
 
         // 懒挂载：卡片快滚进屏幕时才创建动画
         const mountIt = () => {
@@ -768,25 +903,36 @@ npx noah-motion render demo/scene.html --query name=orbits --out orbits.mp4 --si
         lazy.observe(card);
       });
 
-      document.getElementById('sceneCount').textContent = String(cards.length);
+      const newCards = cards.filter((c) => c.dataset.new === 'true');
+      for (const id of ['sceneCount', 'factScenes']) document.getElementById(id).textContent = String(cards.length);
+      document.getElementById('newCount').textContent = String(newCards.length);
 
-      // 分类筛选
+      // 分类筛选（选中的分类记在地址里：?cat=新增，刷新或分享链接都还在）
       const filters = document.getElementById('filters');
       const ORDER = ['文字', '界面', '数据', '图形', '插画'];
-      const cats = ['全部', ...ORDER.filter((c) => cards.some((card) => card.dataset.category === c))];
-      cats.forEach((cat, i) => {
+      const cats = ['全部', '新增', ...ORDER.filter((c) => cards.some((card) => card.dataset.category === c))];
+      const match = (card, cat) => cat === '全部' || (cat === '新增' ? card.dataset.new === 'true' : card.dataset.category === cat);
+      const select = (cat) => {
+        if (!cats.includes(cat)) cat = '全部';
+        filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.cat === cat)));
+        cards.forEach((c) => (c.hidden = !match(c, cat)));
+        const url = new URL(location.href);
+        if (cat === '全部') url.searchParams.delete('cat');
+        else url.searchParams.set('cat', cat);
+        history.replaceState(null, '', url);
+      };
+      cats.forEach((cat) => {
         const b = document.createElement('button');
         b.type = 'button';
+        b.dataset.cat = cat;
         b.setAttribute('role', 'tab');
-        b.setAttribute('aria-selected', String(i === 0));
-        const count = cat === '全部' ? cards.length : cards.filter((c) => c.dataset.category === cat).length;
-        b.innerHTML = `${cat}<span>${count}</span>`;
-        b.onclick = () => {
-          filters.querySelectorAll('button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-          cards.forEach((c) => (c.hidden = cat !== '全部' && c.dataset.category !== cat));
-        };
+        if (cat === '新增') b.className = 'is-new';
+        b.innerHTML = `${cat}<span>${cards.filter((c) => match(c, cat)).length}</span>`;
+        b.onclick = () => select(cat);
         filters.append(b);
       });
+      select(new URLSearchParams(location.search).get('cat') ?? '全部');
+      document.querySelectorAll('[data-jump]').forEach((a) => a.addEventListener('click', () => select(a.dataset.jump)));
 
       const $ = (id) => document.getElementById(id);
 

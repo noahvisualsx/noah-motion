@@ -1,6 +1,7 @@
 // npm run build:site：把演示页打包成可以直接部署的静态网站（输出到 site/）
 //   site/index.html  演示页（网站首页）
 //   site/hero.html   可导出成视频的片头
+//   site/og.png      分享到社交平台时的预览图
 //   site/dist/       编译好的库
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -13,6 +14,11 @@ await fs.mkdir(out, { recursive: true });
 await fs.cp(path.join(root, 'dist'), path.join(out, 'dist'), { recursive: true });
 
 for (const name of await fs.readdir(path.join(root, 'demo'))) {
+  // 分享卡片之类的图片原样复制
+  if (/\.(png|jpe?g|webp|svg)$/.test(name)) {
+    await fs.copyFile(path.join(root, 'demo', name), path.join(out, name));
+    continue;
+  }
   if (!name.endsWith('.html')) continue;
   const html = await fs.readFile(path.join(root, 'demo', name), 'utf8');
   // 演示页在仓库里放在 demo/ 下、引用 ../dist/；网站里放在根目录，改成 ./dist/
